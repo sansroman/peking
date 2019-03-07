@@ -14,7 +14,10 @@ export default new Router({
     {
       path: '/404',
       component: () => import('@/pages/404'),
-      hidden: true,
+    },
+    {
+      path: '/login',
+      component: () => import('@/pages/Login'),
     },
   ],
 })
