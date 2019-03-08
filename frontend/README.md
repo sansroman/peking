@@ -30,8 +30,8 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 ## TODO:
 
 ### Page:
-- [ ] 404
-- [ ] signin
+- [x] 404
+- [x] signin
 - [ ] home
   - [ ] footer
   - [ ] header
@@ -43,3 +43,6 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
   - [ ] player
 - [ ] dashborad
 
+### Router:
+- [ ] Authenticate
+- [ ] Redirect

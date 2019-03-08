@@ -9,6 +9,7 @@ import '@/styles/index.scss' // global css
 import './icons' // icon
 import App from './App'
 import router from './router'
+import store from './store'
 
 Vue.config.productionTip = false
 
@@ -17,6 +18,7 @@ Vue.use(Element)
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>',
 })
