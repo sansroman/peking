@@ -10,7 +10,7 @@
           <item
             v-if="onlyOneChild.meta"
             :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
-            :title="generateTitle(onlyOneChild.meta.title)"
+            :title="onlyOneChild.meta.title"
           />
         </el-menu-item>
       </app-link>
@@ -21,7 +21,7 @@
         <item
           v-if="item.meta"
           :icon="item.meta && item.meta.icon"
-          :title="generateTitle(item.meta.title)"
+          :title="item.meta.title"
         />
       </template>
       <sidebar-item

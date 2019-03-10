@@ -43,5 +43,9 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 - [ ] dashborad
 
 ### Router:
-- [ ] Authenticate
-- [ ] Redirect
+- [x] Authenticate
+- [x] Redirect
+
+### Function:
+- [x] Permission
+- [x] FetchData

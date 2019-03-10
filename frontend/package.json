@@ -17,6 +17,7 @@
     "axios": "^0.18.0",
     "element-ui": "^2.6.1",
     "fuse.js": "^3.4.3",
+    "mockjs": "^1.0.1-beta3",
     "node-sass": "^4.11.0",
     "normalize.css": "^8.0.1",
     "path-to-regexp": "^3.0.0",

@@ -3,24 +3,42 @@ import Router from 'vue-router'
 import Layout from '@/pages/layout/Layout'
 
 Vue.use(Router)
-
-export default new Router({
-  routes: [{
-    path: '/',
-    component: Layout,
-    children: [{
-      path: 'index',
-      component: () => import('@/pages/Home'),
-      name: 'Home',
-    }],
+const constantRouter = [
+  {
+    path: '/login',
+    component: () => import('@/pages/Login'),
   },
   {
     path: '/404',
     component: () => import('@/pages/404'),
   },
+]
+const asyncRouters = [
   {
-    path: '/login',
-    component: () => import('@/pages/Login'),
+    path: '/',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/pages/Home'),
+        name: 'Home',
+        meta: {
+          title: 'Home',
+          icon: 'lock',
+        },
+      },
+    ],
   },
-  ],
+  {
+    path: '/hot',
+    name: 'hot',
+    meta: {
+      title: 'hot',
+      icon: 'eye',
+    },
+  },
+]
+export default new Router({
+  routes: constantRouter,
 })
+export { asyncRouters }

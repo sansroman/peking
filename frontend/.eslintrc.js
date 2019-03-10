@@ -52,6 +52,7 @@ module.exports = {
       "allowShortCircuit": true,
       "allowTernary": true
     }],
-    'no-restricted-syntax': ["error"]
+    'no-restricted-syntax': ["error"],
+    'import/prefer-default-export': false
   }
 }

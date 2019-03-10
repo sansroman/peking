@@ -1,29 +1,28 @@
 import axios from 'axios'
 
-export function loginByUsername(username, password) {
+function loginByUsername(username, password) {
   const data = {
     username,
     password,
   }
   return axios({
-    url: '/login/login',
+    url: '/api/login',
     method: 'post',
     data,
   })
 }
-
-export function logout() {
+function logout() {
   return axios({
-    url: '/login/logout',
+    url: '/api/logout',
     method: 'post',
   })
 }
-
-export function getUserInfo(token) {
+function getUserInfo(token) {
   return axios({
-    url: '/user/info',
+    url: '/api/user/info',
     method: 'get',
     params: { token },
   })
 }
 
+export { loginByUsername, logout, getUserInfo }

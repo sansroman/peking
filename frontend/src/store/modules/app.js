@@ -7,8 +7,6 @@ const app = {
       withoutAnimation: false,
     },
     device: 'desktop',
-    language: Storage.get('language') || 'en',
-    size: Storage.get('size') || 'medium',
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {
@@ -28,14 +26,6 @@ const app = {
     TOGGLE_DEVICE: (state, device) => {
       state.device = device
     },
-    SET_LANGUAGE: (state, language) => {
-      state.language = language
-      Storage.set('language', language)
-    },
-    SET_SIZE: (state, size) => {
-      state.size = size
-      Storage.set('size', size)
-    },
   },
   actions: {
     toggleSideBar({ commit }) {
@@ -46,12 +36,6 @@ const app = {
     },
     toggleDevice({ commit }, device) {
       commit('TOGGLE_DEVICE', device)
-    },
-    setLanguage({ commit }, language) {
-      commit('SET_LANGUAGE', language)
-    },
-    setSize({ commit }, size) {
-      commit('SET_SIZE', size)
     },
   },
 }
