@@ -37,6 +37,14 @@ const asyncRouters = [
       icon: 'eye',
     },
   },
+  {
+    path: '/star',
+    name: 'star',
+    meta: {
+      title: 'star',
+      icon: 'star',
+    },
+  },
 ]
 export default new Router({
   routes: constantRouter,

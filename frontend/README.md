@@ -36,11 +36,14 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
   - [x] navbar
   - [x] sidebar
   - [x] search_box
-  - [ ] room_card
+  - [ ] room_card(click handle)
 - [ ] profile
 - [ ] live video
   - [ ] player
+  - [ ] editor
+  - [ ] danmu
 - [ ] dashborad
+- [ ] profile
 
 ### Router:
 - [x] Authenticate
@@ -49,3 +52,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 ### Function:
 - [x] Permission
 - [x] FetchData
+- [ ] Websocket
+- [ ] MediaServer
+- [ ] HighLight
+- [ ] AutoComplete
