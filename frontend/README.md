@@ -33,10 +33,9 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 - [x] 404
 - [x] signin
 - [ ] home
-  - [ ] footer
-  - [ ] header
-  - [ ] sidebar
-  - [ ] search_box
+  - [x] navbar
+  - [x] sidebar
+  - [x] search_box
   - [ ] room_card
 - [ ] profile
 - [ ] live video

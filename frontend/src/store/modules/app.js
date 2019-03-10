@@ -11,7 +11,7 @@ const app = {
     size: Storage.get('size') || 'medium',
   },
   mutations: {
-    TOGGLE_SIDEBAR: (state) => {
+    TOGGLE_SIDEBAR: state => {
       state.sidebar.opened = !state.sidebar.opened
       state.sidebar.withoutAnimation = false
       if (state.sidebar.opened) {

@@ -5,19 +5,22 @@ import Layout from '@/pages/layout/Layout'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
+  routes: [{
+    path: '/',
+    component: Layout,
+    children: [{
+      path: 'index',
+      component: () => import('@/pages/Home'),
       name: 'Home',
-      component: Layout,
-    },
-    {
-      path: '/404',
-      component: () => import('@/pages/404'),
-    },
-    {
-      path: '/login',
-      component: () => import('@/pages/Login'),
-    },
+    }],
+  },
+  {
+    path: '/404',
+    component: () => import('@/pages/404'),
+  },
+  {
+    path: '/login',
+    component: () => import('@/pages/Login'),
+  },
   ],
 })
