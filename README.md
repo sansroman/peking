@@ -38,11 +38,19 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
   - [x] search_box
   - [x] room_card(click handle)
 - [ ] profile
+  - [ ] collection
+  - [ ] self_info
+  - [ ] teacher
+  - [ ] test
 - [ ] live video
   - [ ] player
   - [ ] editor
   - [ ] danmu
 - [ ] dashborad
+  - [ ] room_manager
+  - [ ] statistics
+  - [ ] student_manager
+  - [ ] test_manager
 
 ### Router:
 - [x] Authenticate
