@@ -27,12 +27,12 @@ export default {
   components: { SidebarItem },
   computed: {
     ...mapGetters(['permission_routers', 'sidebar']),
-    variables() {
+    variables () {
       return variables
     },
-    isCollapse() {
+    isCollapse () {
       return !this.sidebar.opened
-    },
-  },
+    }
+  }
 }
 </script>

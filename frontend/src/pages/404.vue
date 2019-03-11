@@ -9,7 +9,8 @@
       </div>
       <div class="bullshit">
         <div class="bullshit__oops">OOPS!</div>
-        <div class="bullshit__info">版权所有
+        <div class="bullshit__info">
+          版权所有
           <a class="link-type" href="https://wallstreetcn.com" target="_blank">华尔街见闻</a>
         </div>
         <div class="bullshit__headline">{{ message }}</div>
@@ -24,16 +25,16 @@
 export default {
   name: 'Page404',
   computed: {
-    message() {
+    message () {
       return '网管说这个页面你不能进......'
-    },
-  },
+    }
+  }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.wscn-http404-container{
-  transform: translate(-50%,-50%);
+.wscn-http404-container {
+  transform: translate(-50%, -50%);
   position: absolute;
   top: 40%;
   left: 50%;

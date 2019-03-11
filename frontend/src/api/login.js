@@ -1,27 +1,27 @@
 import axios from 'axios'
 
-function loginByUsername(username, password) {
+function loginByUsername (username, password) {
   const data = {
     username,
-    password,
+    password
   }
   return axios({
     url: '/api/login',
     method: 'post',
-    data,
+    data
   })
 }
-function logout() {
+function logout () {
   return axios({
     url: '/api/logout',
-    method: 'post',
+    method: 'post'
   })
 }
-function getUserInfo(token) {
+function getUserInfo (token) {
   return axios({
     url: '/api/user/info',
     method: 'get',
-    params: { token },
+    params: { token }
   })
 }
 

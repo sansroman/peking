@@ -32,11 +32,11 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 ### Page:
 - [x] 404
 - [x] signin
-- [ ] home
+- [x] home
   - [x] navbar
   - [x] sidebar
   - [x] search_box
-  - [ ] room_card(click handle)
+  - [x] room_card(click handle)
 - [ ] profile
 - [ ] live video
   - [ ] player

@@ -1,21 +1,28 @@
 <template>
   <div class="main">
     <el-row>
-      <el-col :span="4" v-for="(o, index) in 30" :key="o" :offset="index % 5 === 0 ? 0 : 1">
-        <el-card :body-style="{ padding: '0px', height: '20pxs'}" shadow="hover">
-          <img src="@/assets/logo.png" class="image">
-          <div class="footer">
-            <h4>{{currentDate}}</h4>
-            <p>德云色双排上大师
-              <span class="popular">111</span>
-            </p>
-          </div>
-        </el-card>
+      <el-col
+        :span="4"
+        v-for="(o, index) in roomList"
+        :key="index"
+        :offset="index % 5 === 0 ? 0 : 1"
+      >
+        <div @click="enterRoom(o.room_id)">
+          <el-card :body-style="{ padding: '0px', height: '20pxs'}" shadow="hover">
+            <img src="@/assets/logo.png" class="image">
+            <div class="footer">
+              <h4>{{o.title}}</h4>
+              <p>
+                {{o.desc}}
+                <span class="popular">{{o.online}}</span>
+              </p>
+            </div>
+          </el-card>
+        </div>
       </el-col>
     </el-row>
   </div>
 </template>
-
 
 <style scoped>
 .el-col {
@@ -54,7 +61,7 @@
   color: #889;
   font-size: 12px;
 }
-.footer h4{
+.footer h4 {
   font-size: 14px;
   text-indent: 10px;
   white-space: nowrap;
@@ -72,11 +79,25 @@ p {
 </style>
 
 <script>
+import { getRoomList } from '@/api/room'
+
 export default {
-  data() {
+  data () {
     return {
       currentDate: '今日直播',
+      roomList: []
     }
   },
+  mounted () {
+    this.getRoomList()
+  },
+  methods: {
+    getRoomList () {
+      getRoomList().then(res => (this.roomList = res.data))
+    },
+    enterRoom (roomID) {
+      this.$router.push({ path: `/room/${roomID}` })
+    }
+  }
 }
 </script>

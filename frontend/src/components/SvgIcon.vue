@@ -10,24 +10,24 @@ export default {
   props: {
     iconClass: {
       type: String,
-      required: true,
+      required: true
     },
     className: {
       type: String,
-      default: '',
-    },
+      default: ''
+    }
   },
   computed: {
-    iconName() {
+    iconName () {
       return `#icon-${this.iconClass}`
     },
-    svgClass() {
+    svgClass () {
       if (this.className) {
         return `svg-icon ${this.className}`
       }
       return 'svg-icon'
-    },
-  },
+    }
+  }
 }
 </script>
 

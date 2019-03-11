@@ -6,12 +6,12 @@ Vue.use(Router)
 const constantRouter = [
   {
     path: '/login',
-    component: () => import('@/pages/Login'),
+    component: () => import('@/pages/Login')
   },
   {
     path: '/404',
-    component: () => import('@/pages/404'),
-  },
+    component: () => import('@/pages/404')
+  }
 ]
 const asyncRouters = [
   {
@@ -24,29 +24,29 @@ const asyncRouters = [
         name: 'Home',
         meta: {
           title: 'Home',
-          icon: 'lock',
-        },
-      },
-    ],
+          icon: 'lock'
+        }
+      }
+    ]
   },
   {
     path: '/hot',
     name: 'hot',
     meta: {
       title: 'hot',
-      icon: 'eye',
-    },
+      icon: 'eye'
+    }
   },
   {
     path: '/star',
     name: 'star',
     meta: {
       title: 'star',
-      icon: 'star',
-    },
-  },
+      icon: 'star'
+    }
+  }
 ]
 export default new Router({
-  routes: constantRouter,
+  routes: constantRouter
 })
 export { asyncRouters }

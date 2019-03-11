@@ -50,7 +50,6 @@
       >登录</el-button>
     </el-form>
 
-
   </div>
 </template>
 
@@ -59,7 +58,7 @@ import { validUsername } from '@/utils/validate'
 
 export default {
   name: 'Login',
-  data() {
+  data () {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
         callback(new Error('Please enter the correct user name'))
@@ -77,31 +76,31 @@ export default {
     return {
       loginForm: {
         username: 'admin',
-        password: '1111111',
+        password: '1111111'
       },
       loginRules: {
         username: [
-          { required: true, trigger: 'blur', validator: validateUsername },
+          { required: true, trigger: 'blur', validator: validateUsername }
         ],
         password: [
-          { required: true, trigger: 'blur', validator: validatePassword },
-        ],
+          { required: true, trigger: 'blur', validator: validatePassword }
+        ]
       },
       passwordType: 'password',
       loading: false,
       showDialog: false,
-      redirect: undefined,
+      redirect: undefined
     }
   },
   methods: {
-    showPwd() {
+    showPwd () {
       if (this.passwordType === 'password') {
         this.passwordType = ''
       } else {
         this.passwordType = 'password'
       }
     },
-    handleLogin() {
+    handleLogin () {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
@@ -119,8 +118,8 @@ export default {
         // console.log('error submit!!')
         return false
       })
-    },
-  },
+    }
+  }
 }
 </script>
 

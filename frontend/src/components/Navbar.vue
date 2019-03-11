@@ -44,26 +44,26 @@ export default {
   components: {
     Breadcrumb,
     Hamburger,
-    Search,
+    Search
   },
   computed: {
     ...mapGetters([
       'sidebar',
       'name',
       'avatar',
-      'device',
-    ]),
+      'device'
+    ])
   },
   methods: {
-    toggleSideBar() {
+    toggleSideBar () {
       this.$store.dispatch('toggleSideBar')
     },
-    logout() {
+    logout () {
       this.$store.dispatch('LogOut').then(() => {
         location.reload()// In order to re-instantiate the vue-router object to avoid bugs
       })
-    },
-  },
+    }
+  }
 }
 </script>
 

@@ -22,7 +22,7 @@ import Fuse from 'fuse.js'
 
 export default {
   name: 'HeaderSearch',
-  data() {
+  data () {
     return {
       search: '',
       options: [],
@@ -79,38 +79,41 @@ export default {
         'Washington',
         'West Virginia',
         'Wisconsin',
-        'Wyoming',
-      ],
+        'Wyoming'
+      ]
     }
   },
   watch: {
-    searchPool(list) {
+    searchPool (list) {
       this.initFuse(list)
     },
-    show(value) {
+    show (value) {
       if (value) {
-        setTimeout(() => document.body.addEventListener('click', this.close), 100)
+        setTimeout(
+          () => document.body.addEventListener('click', this.close),
+          100
+        )
       } else {
         document.body.removeEventListener('click', this.close)
       }
-    },
+    }
   },
-  mounted() {
+  mounted () {
     this.searchPool = this.mock.map(item => ({ keyword: item, label: item }))
   },
   methods: {
-    click() {
+    click () {
       this.show = !this.show
       if (this.show) {
         this.$refs.headerSearchSelect && this.$refs.headerSearchSelect.focus()
       }
     },
-    close() {
+    close () {
       this.$refs.headerSearchSelect && this.$refs.headerSearchSelect.blur()
       this.options = []
       this.show = false
     },
-    change(val) {
+    change (val) {
       this.$router.push(val.path)
       this.search = ''
       this.options = []
@@ -118,7 +121,7 @@ export default {
         this.show = false
       })
     },
-    initFuse(list) {
+    initFuse (list) {
       this.fuse = new Fuse(list, {
         shouldSort: true,
         threshold: 0.4,
@@ -129,23 +132,23 @@ export default {
         keys: [
           {
             name: 'keyword',
-            weight: 0.7,
+            weight: 0.7
           },
           {
             name: 'label',
-            weight: 0.3,
-          },
-        ],
+            weight: 0.3
+          }
+        ]
       })
     },
-    querySearch(query) {
+    querySearch (query) {
       if (query !== '') {
         this.options = this.fuse.search(query)
       } else {
         this.options = []
       }
-    },
-  },
+    }
+  }
 }
 </script>
 

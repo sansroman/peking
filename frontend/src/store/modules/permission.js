@@ -1,12 +1,12 @@
 import { asyncRouters } from '@/router'
 
-function hasPermission(roles, route) {
+function hasPermission (roles, route) {
   if (route.meta && route.meta.roles) {
     return roles.some(role => route.meta.roles.includes(role))
   }
   return true
 }
-function filterRouter(routes, roles) {
+function filterRouter (routes, roles) {
   const res = []
 
   routes.forEach(route => {
@@ -22,16 +22,16 @@ function filterRouter(routes, roles) {
 const permission = {
   state: {
     routers: [],
-    addRouters: [],
+    addRouters: []
   },
   mutations: {
     SET_ROUTERS: (state, routers) => {
       state.addRouters = routers
       state.routers = state.routers.concat(routers)
-    },
+    }
   },
   actions: {
-    GenerateRoutes({ commit }, data) {
+    GenerateRoutes ({ commit }, data) {
       return new Promise(resolve => {
         const { roles } = data
         let accessedRoutes = []
@@ -43,7 +43,7 @@ const permission = {
         commit('SET_ROUTERS', accessedRoutes)
         resolve()
       })
-    },
-  },
+    }
+  }
 }
 export default permission

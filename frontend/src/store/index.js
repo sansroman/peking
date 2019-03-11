@@ -13,9 +13,9 @@ const store = new Vuex.Store({
     app,
     permission,
     user,
-    tagsView,
+    tagsView
   },
-  getters,
+  getters
 })
 
 export default store

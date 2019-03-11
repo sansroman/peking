@@ -4,9 +4,9 @@ const app = {
   state: {
     sidebar: {
       opened: Storage.get('sidebarStatus') ? !!+Storage.get('sidebarStatus') : true,
-      withoutAnimation: false,
+      withoutAnimation: false
     },
-    device: 'desktop',
+    device: 'desktop'
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {
@@ -25,19 +25,19 @@ const app = {
     },
     TOGGLE_DEVICE: (state, device) => {
       state.device = device
-    },
+    }
   },
   actions: {
-    toggleSideBar({ commit }) {
+    toggleSideBar ({ commit }) {
       commit('TOGGLE_SIDEBAR')
     },
-    closeSideBar({ commit }, { withoutAnimation }) {
+    closeSideBar ({ commit }, { withoutAnimation }) {
       commit('CLOSE_SIDEBAR', withoutAnimation)
     },
-    toggleDevice({ commit }, device) {
+    toggleDevice ({ commit }, device) {
       commit('TOGGLE_DEVICE', device)
-    },
-  },
+    }
+  }
 }
 
 export default app
