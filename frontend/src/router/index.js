@@ -11,6 +11,15 @@ const constantRouter = [
   {
     path: '/404',
     component: () => import('@/pages/404')
+  },
+  {
+    path: '/room',
+    component: Layout,
+    children: [{
+      path: ':id',
+      name: 'room',
+      component: () => import('@/pages/Room')
+    }]
   }
 ]
 const asyncRouters = [
@@ -19,7 +28,7 @@ const asyncRouters = [
     component: Layout,
     children: [
       {
-        path: 'index',
+        path: '',
         component: () => import('@/pages/Home'),
         name: 'Home',
         meta: {
@@ -31,19 +40,29 @@ const asyncRouters = [
   },
   {
     path: '/hot',
-    name: 'hot',
-    meta: {
-      title: 'hot',
-      icon: 'eye'
-    }
+    component: Layout,
+    children: [
+      {
+        path: '',
+        name: 'hot',
+        meta: {
+          title: 'hot',
+          icon: 'eye'
+        }
+      }
+    ]
   },
   {
     path: '/star',
-    name: 'star',
-    meta: {
-      title: 'star',
-      icon: 'star'
-    }
+    component: Layout,
+    children: [{
+      path: '',
+      name: 'star',
+      meta: {
+        title: 'star',
+        icon: 'star'
+      }
+    }]
   }
 ]
 export default new Router({
