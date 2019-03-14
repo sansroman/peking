@@ -302,16 +302,16 @@ export default {
   },
   components: {},
   mounted () {
-    // if (flvjs.isSupported()) {
-    //   var videoElement = document.getElementById('videoElement')
-    //   var flvPlayer = flvjs.createPlayer({
-    //     type: 'flv',
-    //     url: `http://118.25.45.164:9090/live/${this.$route.params.id}.flv`
-    //   })
-    //   flvPlayer.attachMediaElement(videoElement)
-    //   flvPlayer.load()
-    //   flvPlayer.play()
-    // }
+    if (flvjs.isSupported()) {
+      var videoElement = document.getElementById('videoElement')
+      var flvPlayer = flvjs.createPlayer({
+        type: 'flv',
+        url: `http://118.25.45.164:9090/live/${this.$route.params.id}.flv`
+      })
+      flvPlayer.attachMediaElement(videoElement)
+      flvPlayer.load()
+      flvPlayer.play()
+    }
   }
 }
 </script>

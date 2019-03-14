@@ -20,6 +20,11 @@ const constantRouter = [
       name: 'room',
       component: () => import('@/pages/Room')
     }]
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: () => import('@/pages/Profile')
   }
 ]
 const asyncRouters = [

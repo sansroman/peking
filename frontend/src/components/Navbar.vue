@@ -1,10 +1,12 @@
 <template>
   <div class="navbar">
+    <div v-show="hasSide">
     <hamburger
       :toggle-click="toggleSideBar"
       :is-active="sidebar.opened"
       class="hamburger-container"/>
     <breadcrumb class="breadcrumb-container"/>
+    </div>
     <div class="right-menu">
       <template v-if="device!=='mobile'">
         <search class="right-menu-item" />
@@ -15,9 +17,9 @@
           <i class="el-icon-caret-bottom"/>
         </div>
         <el-dropdown-menu slot="dropdown">
-          <router-link to="/">
+          <router-link to="/profile">
             <el-dropdown-item>
-              dashboard
+              profile
             </el-dropdown-item>
           </router-link>
           <a target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">
@@ -46,6 +48,7 @@ export default {
     Hamburger,
     Search
   },
+  props: ['hasSide'],
   computed: {
     ...mapGetters([
       'sidebar',
