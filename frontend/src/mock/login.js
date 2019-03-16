@@ -1,3 +1,4 @@
+import { param2Obj } from '@/utils'
 const userMap = {
   admin: {
     roles: ['admin'],
@@ -15,18 +16,6 @@ const userMap = {
   }
 }
 
-function param2Obj (url) {
-  const search = url.split('?')[1]
-  if (!search) {
-    return {}
-  }
-  return JSON.parse(
-    `{"${decodeURIComponent(search)
-      .replace(/"/g, '\\"')
-      .replace(/&/g, '","')
-      .replace(/=/g, '":"')}"}`
-  )
-}
 function loginByUsername (config) {
   const { username } = JSON.parse(config.body)
   return userMap[username]

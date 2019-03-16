@@ -24,7 +24,46 @@ const constantRouter = [
   {
     path: '/profile',
     name: 'profile',
-    component: () => import('@/pages/Profile')
+    component: () => import('@/pages/Profile'),
+    children: [
+      {
+        name: 'todo',
+        path: 'todo',
+        component: () => import('@/pages/subView/TODO')
+      },
+      {
+        name: 'statistics',
+        path: 'statistics',
+        component: () => import('@/pages/subView/Statistics')
+      },
+      {
+        name: 'setting',
+        path: 'setting',
+        component: () => import('@/pages/subView/Setting')
+      },
+      {
+        name: 'test',
+        path: 'test',
+        component: () => import('@/pages/subView/Test'),
+        children: [
+          {
+            path: ':id',
+            name: 'testDetail',
+            component: () => import('@/pages/subView/TestDetail')
+          }
+        ]
+      },
+      {
+        name: 'task',
+        path: 'task',
+        component: () => import('@/pages/subView/Task')
+      },
+      {
+        name: 'course',
+        path: 'course',
+        component: () => import('@/pages/subView/Course')
+      }
+    ]
   }
 ]
 const asyncRouters = [

@@ -1,12 +1,10 @@
 <template>
   <div class="navbar">
-    <div v-show="hasSide">
     <hamburger
       :toggle-click="toggleSideBar"
       :is-active="sidebar.opened"
       class="hamburger-container"/>
     <breadcrumb class="breadcrumb-container"/>
-    </div>
     <div class="right-menu">
       <template v-if="device!=='mobile'">
         <search class="right-menu-item" />
@@ -48,7 +46,6 @@ export default {
     Hamburger,
     Search
   },
-  props: ['hasSide'],
   computed: {
     ...mapGetters([
       'sidebar',
