@@ -7,14 +7,21 @@
       :router="true"
       @select="handleSelect"
     >
-      <el-menu-item index="/">回到首页</el-menu-item>
-      <el-submenu index="study">
+      <el-menu-item index="0">回到首页</el-menu-item>
+
+      <el-submenu index="1" v-show="roles.includes('student')">
         <template slot="title">学习中心</template>
         <el-menu-item index="2-1" :route="{name: 'course'}">我的课程</el-menu-item>
-        <el-menu-item index="2-2" :route="{name: 'test'}">我的提交</el-menu-item>
-        <el-menu-item index="2-3" :route="{name: 'task'}">我的作业</el-menu-item>
+        <el-menu-item index="2-2" :route="{name: 'test'}">我的任务</el-menu-item>
       </el-submenu>
-      <el-menu-item index="3" :route="{name: 'statistics'}">学习统计</el-menu-item>
+      <el-submenu index="6"  v-show="roles.includes('teacher')">
+        <template slot="title">教学中心</template>
+        <el-menu-item index="6-1" :route="{name: 'studentManager'}">我的学生</el-menu-item>
+        <el-menu-item index="6-2" :route="{name: 'testManager'}">查看作业</el-menu-item>
+        <el-menu-item index="6-2" :route="{name: 'roomManager'}">我的直播间</el-menu-item>
+      </el-submenu>
+      <el-menu-item index="3" v-show="roles.includes('student')" :route="{name: 'statistics'}">学习统计</el-menu-item>
+      <el-menu-item index="7" v-show="roles.includes('teacher')" :route="{name: 'teacherStatistics'}">教学统计</el-menu-item>
       <el-menu-item index="4" :route="{name: 'todo'}">TODO</el-menu-item>
       <el-menu-item index="5" :route="{name: 'setting'}">个人设置</el-menu-item>
       <el-menu-item class="right-menu">
@@ -105,7 +112,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Profile',
   computed: {
-    ...mapGetters(['name', 'avatar'])
+    ...mapGetters(['name', 'avatar', 'roles'])
   },
   data () {
     return {

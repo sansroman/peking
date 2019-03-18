@@ -7,8 +7,7 @@ export function isExternal (path) {
 }
 
 export function validUsername (str) {
-  const validMap = ['admin', 'editor']
-  return validMap.indexOf(str.trim()) >= 0
+  return str.length >= 5
 }
 
 /* 合法uri */

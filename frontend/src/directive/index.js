@@ -1,13 +1,13 @@
-import waves from './waves'
+import drag from './drag'
 
 const install = function (Vue) {
-  Vue.directive('waves', waves)
+  Vue.directive('el-drag-dialog', drag)
 }
 
 if (window.Vue) {
-  window.waves = waves
+  window['el-drag-dialog'] = drag
   Vue.use(install); // eslint-disable-line
 }
 
-waves.install = install
-export default waves
+drag.install = install
+export default drag

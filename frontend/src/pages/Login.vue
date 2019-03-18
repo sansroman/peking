@@ -1,6 +1,30 @@
 <template>
   <div class="login-container">
+    <el-dialog v-el-drag-dialog :visible.sync="dialogTableVisible" title="注册" @dragDialog="handleDrag">
+      <el-form :model="userInfo">
+        <el-form-item prop="username">
+          <md-input
+            v-model="userInfo.username"
+            icon="info"
+            name="username"
+            placeholder="输入名称"
+          >用户名称</md-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <md-input v-model="userInfo.pasword" icon="info" name="password" placeholder="输入名称">密码</md-input>
+        </el-form-item>
+        <el-form-item prop="email">
+          <md-input v-model="userInfo.email" icon="info" name="email" placeholder="输入名称">个人邮箱</md-input>
+        </el-form-item>
+        <el-form-item prop="phone">
+          <md-input v-model="userInfo.phone" icon="info" name="phone" placeholder="输入名称">手机号码</md-input>
+        </el-form-item>
+        <el-button type="primary">提交</el-button>
+        <el-button>重置</el-button>
+      </el-form>
+    </el-dialog>
     <el-form
+      id="login"
       ref="loginForm"
       :model="loginForm"
       :rules="loginRules"
@@ -42,12 +66,8 @@
         </span>
       </el-form-item>
 
-      <el-button
-        :loading="loading"
-        type="primary"
-        style="width:100%;margin-bottom:30px;"
-        @click.native.prevent="handleLogin"
-      >登录</el-button>
+      <el-button :loading="loading" type="primary" style="width:30%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
+      <el-button type="primary" style="width:30%;margin-bottom:30px;" @click="dialogTableVisible = true">注册</el-button>
     </el-form>
 
   </div>
@@ -55,9 +75,13 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
+import elDragDialog from '@/directive/drag'
+import MdInput from '@/components/MdInput'
 
 export default {
   name: 'Login',
+  directives: { elDragDialog },
+  components: { MdInput },
   data () {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
@@ -75,7 +99,7 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
+        username: 'student',
         password: '1111111'
       },
       loginRules: {
@@ -89,7 +113,9 @@ export default {
       passwordType: 'password',
       loading: false,
       showDialog: false,
-      redirect: undefined
+      redirect: undefined,
+      userInfo: {},
+      dialogTableVisible: false
     }
   },
   methods: {
@@ -118,6 +144,9 @@ export default {
         // console.log('error submit!!')
         return false
       })
+    },
+    handleDrag () {
+      this.$refs.select.blur()
     }
   }
 }
@@ -141,7 +170,7 @@ $cursor: #fff;
 }
 
 /* reset element-ui css */
-.login-container {
+#login {
   .el-input {
     display: inline-block;
     height: 47px;

@@ -8,7 +8,6 @@ function hasPermission (roles, route) {
 }
 function filterRouter (routes, roles) {
   const res = []
-
   routes.forEach(route => {
     const tmp = { ...route }
     if (hasPermission(roles, tmp)) {
@@ -18,6 +17,7 @@ function filterRouter (routes, roles) {
       res.push(tmp)
     }
   })
+  return res
 }
 const permission = {
   state: {

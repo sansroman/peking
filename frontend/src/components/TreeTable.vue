@@ -69,7 +69,7 @@ export default {
     },
     indent: {
       type: Number,
-      default: 50
+      default: 10
     }
   },
   data () {

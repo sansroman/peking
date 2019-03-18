@@ -38,10 +38,10 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
   - [x] search_box
   - [x] room_card(click handle)
 - [ ] profile
-  - [ ] collection
-  - [ ] self_info
+  - [x] collection
+  - [x] self_info
   - [ ] teacher
-  - [ ] test
+  - [x] test
 - [ ] live video
   - [x] layout
   - [ ] player
@@ -49,7 +49,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
   - [ ] danmu
 - [ ] dashborad
   - [ ] room_manager
-  - [ ] statistics
+  - [x] statistics
   - [ ] student_manager
   - [ ] test_manager
 

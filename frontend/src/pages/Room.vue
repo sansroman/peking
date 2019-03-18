@@ -1,209 +1,127 @@
 <template>
   <div class="room" :style="{height:live_basic_height+'px'}">
-    <el-dialog width="50%" title="hbase 测试题" :visible.sync="innerVisible" append-to-body>
-      <div>
-        <el-container>
-          <el-main>
-            <div v-for="question in questions" :key="question">
-              <p>{{question.title}}</p>
-              <el-radio-group v-model="question.modelname" class="sssadasdas">
-                <div v-for="(select, index) in question.selects" :key="index">
-                  <el-radio :label="index">{{select.answer}}</el-radio>
-                </div>
-              </el-radio-group>
-            </div>
-            <Button type="info" @click="submit">提交</Button>
-          </el-main>
-        </el-container>
+    <el-dialog v-el-drag-dialog :visible.sync="dialogTableVisible" title="编辑器" @dragDialog="handleDrag">
+      <div class="title">
+        <span>请谈谈你对线性代数这门科学的看法</span>
+      </div>
+      <markdown-editor ref="markdownEditor" v-model="content" :options="{hideModeSwitch:true,previewStyle:'tab'}" height="200px"/>
+      <div class="operating">
+        <el-button type="primary">提交</el-button>
+        <el-button>重置</el-button>
       </div>
     </el-dialog>
-
-    <div class="live_bg"></div>
-    <div class="live_show">
-      <el-row>
-        <el-col :span="left" style="padding:10px">
-          <div class="live_play">
-            <div class="left_header">
-              <el-row>
-                <el-col :span="3">
-                  <img :src="live.user" alt>
-                </el-col>
-                <el-col :span="18">
-                  <el-row>
-                    <el-col :span="2">
-                    </el-col>
-                    <el-col :span="8" style="overflow:hidden;">
-                      <h1>{{newTitle}}</h1>
-                    </el-col>
-                    <el-col :span="10">
-                      <p>{{live.classification}}</p>
-                    </el-col>
-                  </el-row>
-                  <el-row class="live_header_morinfo">
-                    <el-col :span="4">
-                      <div>{{live.teacher}}</div>
-                    </el-col>
-                    <el-col :span="3">
-                      <div class="live_ranking">
-                        <svg-icon class-name="search-icon" icon-class="search"/>
-                        {{live.ranking}}
-                      </div>
-                    </el-col>
-                    <el-col :span="16">
-                      <!-- <Icon type="eye"></Icon> -->
-                      <svg-icon class-name="search-icon" icon-class="search"/>
-                      {{live.number}}
-                    </el-col>
-                  </el-row>
-                </el-col>
-                <el-col :span="3">
-                  <Button type="primary" class="movie_butten">
-                    <!-- <Icon style="font-size:14px" type="ios-heart"></Icon> -->
-                    <svg-icon class-name="search-icon" icon-class="search"/>
-                    关注
-                  </Button>
-                </el-col>
-              </el-row>
-            </div>
-            <div class="left_main">
-              <video id="videoElement" :style="{width: leftheight+'px'}"></video>
-            </div>
-            <div class="left_bottem">
-              <el-row>
-                <el-col :span="20"></el-col>
-                <el-col :span="4">
-                  <Button
-                    type="primary"
-                    :disabled="textshow"
-                    @click="innershow"
-                    style="margin-top:20px;"
-                  >课堂作业</Button>
-                </el-col>
-              </el-row>
-            </div>
+    <el-row>
+      <el-col class="live_play" :span="18" :gutter="20">
+        <el-row class="left_header">
+          <el-col :span="3">
+            <img
+              src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif"
+              class="user-avatar"
+            >
+            <span style="margin-left: 20px">{{live.teacher}}</span>
+          </el-col>
+          <el-col :span="18">
+            <el-row>
+              <el-col :span="8" style="overflow:hidden;">
+                <h1>{{newTitle}}</h1>
+              </el-col>
+              <el-col :span="10">
+                <p>{{live.classification}}</p>
+              </el-col>
+            </el-row>
+            <el-row class="live_header_morinfo">
+              <el-col :span="4">
+              </el-col>
+              <el-col :span="3">
+                <div class="live_ranking">
+                  <svg-icon class-name="search-icon" icon-class="search"/>
+                  {{live.ranking}}
+                </div>
+              </el-col>
+              <el-col :span="16">
+                <svg-icon class-name="search-icon" icon-class="search"/>
+                {{live.number}}
+              </el-col>
+            </el-row>
+          </el-col>
+          <el-col :span="3">
+            <Button type="primary" class="movie_butten">
+              <svg-icon class-name="search-icon" icon-class="search"/>关注
+            </Button>
+          </el-col>
+        </el-row>
+        <el-row class="left_main">
+          <video controls id="videoElement"></video>
+        </el-row>
+        <el-row class="left_bottem">
+          <el-col :span="20"></el-col>
+          <el-col :span="4">
+            <el-button type="primary" @click="dialogTableVisible = true">打开编辑器</el-button>
+          </el-col>
+        </el-row>
+      </el-col>
+      <el-col class="live_info" :span="6">
+        <div class="right_header">
+          <h1>教师助理</h1>
+        </div>
+        <div class="right_main">
+          <div class="live_massge">
+            <ul class="live_comments">
+              <li v-for="comm in comments" :key="comm">
+                <p>
+                  <span>{{comm.uname}}:</span>
+                  {{comm.utext}}
+                </p>
+              </li>
+            </ul>
           </div>
-        </el-col>
-        <el-col :span="right" style="padding:10px 5px">
-          <div class="live_info" v-show="rihgtshow">
-            <div class="right_header">
-              <h1>教师助理</h1>
-            </div>
-            <div class="right_main">
-              <div class="live_massge">
-                <ul class="live_comments">
-                  <li v-for="comm in comments" :key="comm">
-                    <p>
-                      <span>{{comm.uname}}: </span>
-                      {{comm.utext}}
-                    </p>
-                  </li>
-                </ul>
-              </div>
-              <div class="live_comm">
-                <el-row class="comm_buttonBar">
-                  <el-col :span="7" style="color:#1e88e5;font-size:16px;">讨论主题:</el-col>
-                  <el-col :span="16" style="font-size:16px; text-align:left;">{{commm}}</el-col>
-                </el-row>
-                <el-input
-                  class="comm_input"
-                  v-model="user_comment"
-                  type="textarea"
-                  :el-rows="3"
-                  placeholder="在此输入....."
-                ></el-input>
-              </div>
-              <span class="count">剩余讨论时间{{count}} s</span>
-              <Button type="primary" class="comm_sent" @click="sendMessage()">发送</Button>
-            </div>
-          </div>
-        </el-col>
-      </el-row>
-    </div>
+        </div>
+        <div class="live_comm">
+          <el-input
+            class="comm_input"
+            v-model="user_comment"
+            type="textarea"
+            :el-rows="3"
+            placeholder="在此输入....."
+          ></el-input>
+        </div>
+        <span class="count">剩余讨论时间{{count}} s</span>
+        <Button type="primary" class="comm_sent" @click="sendMessage()">发送</Button>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
-import flvjs from 'flv'
+import flvjs from 'flv.js'
+import elDragDialog from '@/directive/drag'
+import MarkdownEditor from '@/components/MarkdownEditor'
 
 export default {
+  directives: { elDragDialog },
   data () {
     return {
+      dialogTableVisible: false,
       live_basic_height: 950,
-      left: 24,
-      right: 0,
-      leftheight: '1178',
       count: '',
       client: '',
-      commm: '三大主流框架对比',
+      content: '',
       user_comment: '',
       textshow: true,
       innerVisible: false,
-      rihgtshow: false,
       live: {
-        title: '未命名直播',
-        classification: '未知分类',
-        teacher: '张老师',
+        title: '线性代数第一章',
+        classification: '高等数学',
+        teacher: '李永乐老师',
         ranking: '1000',
         user: '',
         number: 1233
       },
       comments: [],
-      radio: '1',
-      questions: [
-        {
-          title: 'Hbase 如何卸载',
-          modelname: 'radio2',
-          selects: [
-            {
-              answer: 'linux'
-            },
-            {
-              answer: 'windows'
-            }
-          ]
-        },
-        {
-          title: 'Hbase 如何卸载',
-          modelname: 'radio2',
-          selects: [
-            {
-              answer: 'linux'
-            },
-            {
-              answer: 'windows'
-            }
-          ]
-        },
-        {
-          title: 'Hbase 如何卸载',
-          modelname: 'radio2',
-          selects: [
-            {
-              answer: 'linux'
-            },
-            {
-              answer: 'windows'
-            }
-          ]
-        },
-        {
-          title: 'Hbase 如何卸载',
-          modelname: 'radio2',
-          selects: [
-            {
-              answer: 'linux'
-            },
-            {
-              answer: 'windows'
-            }
-          ]
-        }
-      ]
+      radio: '1'
     }
   },
   computed: {
     newTitle: function () {
-      // console.log(this.live.title);
-      // return this.live.title
       return this.live.title.length > 8
         ? this.live.title.substring(0, 7) + '...'
         : this.live.title
@@ -211,102 +129,37 @@ export default {
   },
   methods: {
     sendMessage: function () {
-      // this.comments.push({ uname: '你自己', utext: this.user_comment })
-      // this.client.emit('msg', this.user_comment)
-      // this.user_comment = ''
+      this.comments.push({ uname: '你自己', utext: this.user_comment })
+      this.client.emit('msg', this.user_comment)
+      this.user_comment = ''
     },
     submit: function () {
-      // console.log(this.questions)
-      // this.$axios
-      //   .post(`live/${this.$route.params.id}/receipt`, {
-      //     data: this.questions
-      //   })
-      //   .then(() => {
-      //     this.$Message.info('提交成功', 3)
-      //   })
-      // this.innerVisible = false
-    },
-    changesmall: function (type) {
-      // if (type) {
-      //   this.rihgtshow = true
-      //   this.left = 18
-      //   this.right = 6
-      //   this.leftheight = 878
-      //   this.getCode()
-      //   this.live_basic_height = 800
-      // } else {
-      //   //   console.log("ssssss")
-      //   this.rihgtshow = false
-      //   this.left = 24
-      //   this.right = 0
-      //   this.leftheight = 1178
-      //   this.live_basic_height = 950
-      // }
+      console.log(this.questions)
+      this.$axios
+        .post(`live/${this.$route.params.id}/receipt`, {
+          data: this.questions
+        })
+        .then(() => {
+          this.$Message.info('提交成功', 3)
+        })
+      this.innerVisible = false
     },
     innershow: function () {
       this.innerVisible = true
     },
-    getCode: function () {
-      // let _this = this
-      // const TIME_COUNT = 180
-      // if (!this.timer) {
-      //   this.count = TIME_COUNT
-      //   this.timer = setInterval(() => {
-      //     if (this.count > 0 && this.count <= TIME_COUNT) {
-      //       this.count--
-      //     } else {
-      //       clearInterval(this.timer)
-      //       this.changesmall(false)
-      //       this.$Message.info('讨论结束', 3)
-      //       this.timer = null
-      //     }
-      //   }, 1000)
-      // }
+    handleDrag () {
+      this.$refs.select.blur()
     }
   },
-  created () {
-    // Vue.use(VueSocketio, '170.20.153.144:3000');
-    // let _this = this
-    // this.client = socketio('ws://172.20.153.144:7001', {
-    //   query: { room: this.$route.params.id, userID: $store.state.userdata.name }
-    // })
-    // this.client.on('connect', function () {
-    //   console.log('sucess')
-    //   // this.$socket.emit('join','甘霖娘')
-    // })
-
-    // this.client.on('msg', function (uname, utext) {
-    //   //    console.log(this.comments);
-    //   // console.log({uname,utext})
-    //   _this.comments.push({ uname, utext })
-    // })
-    // this.client.on('online', function (val) {
-    //   console.log(val)
-    //   _this.$Message.warning('有学生加入')
-    // })
-    // this.client.on('startQuiz', (num, time, data) => {
-    //   console.log('data', data)
-    //   this.questions.splice(0, 100)
-    //   this.questions = this.questions.concat(data)
-    //   console.log('arr:', this.questions)
-    //   _this.textshow = false
-    // })
-    // this.client.on('startDiscuss', function (sub, time) {
-    //   _this.changesmall(true)
-    //   _this.commm = sub
-    // })
-    // this.client.on('pissoff', function (mess) {
-    //   _this.$Message.info('直播结束', 10)
-    //   _this.client.disconnect()
-    // })
-  },
-  components: {},
+  created () {},
+  components: { MarkdownEditor },
   mounted () {
     if (flvjs.isSupported()) {
       var videoElement = document.getElementById('videoElement')
       var flvPlayer = flvjs.createPlayer({
         type: 'flv',
-        url: `http://118.25.45.164:9090/live/${this.$route.params.id}.flv`
+        url:
+          'https://js.live-play.acgvideo.com/live-js/367147/live_180031935_2856100.flv?wsSecret=96885dcd618494307dc7a7436f053ca3&wsTime=1552807059&trid=8cc4d7292c144589be5f92398aa35634&sig=no&platform=web&pSession=12zJ93KY-ymjz-4t1p-h234-1YF6eQ294cXR'
       })
       flvPlayer.attachMediaElement(videoElement)
       flvPlayer.load()
@@ -315,7 +168,8 @@ export default {
   }
 }
 </script>
-<style scoped>
+
+<style rel="stylesheet/scss" lang="scss">
 .live_basic {
   background-color: #f2f3f5;
   animation: all 5s ease-in;
@@ -334,7 +188,6 @@ export default {
 }
 .live_play,
 .live_info {
-  height: 700px;
   background: #fff;
   border-radius: 10px;
   border: #e1e1e1 1px solid;
@@ -345,7 +198,7 @@ export default {
 }
 .left_header {
   padding: 17px 24px 17px 17px;
-  height: 100px;
+  background-color: #23ade5;
 }
 .left_header h1 {
   font-weight: 500;
@@ -444,7 +297,21 @@ export default {
   font-size: 14px;
   color: #23ade5;
 }
-.sssadasdas {
-  margin: 5px 0px 10px 0px;
+.user-avatar{
+  margin-right: 20px;
 }
+video {
+  width: 100%;
+  height: 100%;
+}
+.el-dialog__body {
+  padding: 10px 20px;
+  .title {
+    margin-bottom: 10px;
+  }
+  .operating {
+    margin-top: 10px;
+  }
+}
+
 </style>

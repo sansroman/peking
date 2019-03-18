@@ -13,7 +13,7 @@
             <div class="footer">
               <h4>{{o.title}}</h4>
               <p>
-                {{o.desc}}
+                {{o.desc.length > 10 ? `${o.desc.substring(0, 10)}...` : o.desc}}
                 <span class="popular">{{o.online}}</span>
               </p>
             </div>

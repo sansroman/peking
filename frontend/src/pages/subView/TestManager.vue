@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input placeholder="标题" v-model="listQuery.title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
-      <el-select v-model="listQuery.importance" placeholder="重要性" clearable style="width: 90px" class="filter-item">
+      <el-select v-model="listQuery.importance" placeholder="评级" clearable style="width: 90px" class="filter-item">
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item"/>
       </el-select>
       <el-select v-model="listQuery.type" placeholder="类型" clearable class="filter-item" style="width: 130px">
@@ -52,7 +52,7 @@
           <span style="color:red;">{{ scope.row.reviewer }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="重要性" width="80px">
+      <el-table-column label="评级" width="80px">
         <template slot-scope="scope">
           <svg-icon v-for="n in +scope.row.importance" :key="n" icon-class="star" class="meta-item__icon"/>
         </template>

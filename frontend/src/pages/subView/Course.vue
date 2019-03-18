@@ -8,7 +8,7 @@
       </el-button>
 
       <div class="option-item">
-        <el-tag>Expand All</el-tag>
+        <el-tag>展开全部</el-tag>
         <el-switch
           v-model="defaultExpandAll"
           active-color="#13ce66"
@@ -17,7 +17,7 @@
       </div>
 
       <div class="option-item">
-        <el-tag>Show Checkbox</el-tag>
+        <el-tag>显示多选框</el-tag>
         <el-switch
           v-model="showCheckbox"
           active-color="#13ce66"
@@ -55,26 +55,36 @@ export default {
       key: 1,
       columns: [
         {
-          label: 'Checkbox',
-          checkbox: true
-        },
-        {
-          label: '',
-          key: 'id',
+          checkbox: true,
+          width: 70,
           expand: true
         },
         {
-          label: 'Event',
-          key: 'event',
-          width: 200,
-          align: 'left'
+          label: '课程编号',
+          key: 'id',
+          expand: true,
+          width: 100
         },
         {
-          label: 'Scope',
-          key: 'scope'
+          label: '课程名称',
+          key: 'name',
+          width: 100
         },
         {
-          label: 'Operation',
+          label: '任课老师',
+          key: 'teacher',
+          width: 100
+        },
+        {
+          label: '课程章节',
+          key: 'chapter'
+        },
+        {
+          label: '观看进度',
+          key: 'process'
+        },
+        {
+          label: '操作',
           key: 'operation'
         }
       ],
