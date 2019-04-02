@@ -64,3 +64,44 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 - [ ] MediaServer
 - [ ] HighLight
 - [ ] AutoComplete
+
+### Model
+#### User
+- id
+- email
+- phone
+- avatar
+- role
+- description
+- nickname
+- created_at
+- last_login_at
+
+#### Article
+- id
+- author_id
+- title
+- content
+- views
+- collection
+
+#### Room
+- id
+- own_id
+- title
+- token
+- views
+- status
+- category
+- collection
+- last_start_at
+
+#### Room_collection
+
+#### Exercise
+
+#### Grade
+
+#### TODO
+
+#### Comment
