@@ -118,6 +118,7 @@ const homeRouter = [
       {
         path: '',
         name: 'hot',
+        component: () => import('@/pages/Home'),
         meta: {
           title: 'hot',
           icon: 'eye'
@@ -131,9 +132,23 @@ const homeRouter = [
     children: [{
       path: '',
       name: 'star',
+      component: () => import('@/pages/Home'),
       meta: {
         title: 'star',
         icon: 'star'
+      }
+    }]
+  },
+  {
+    path: '/articles',
+    component: Layout,
+    children: [{
+      path: '',
+      name: 'article',
+      component: () => import('@/pages/Article'),
+      meta: {
+        title: 'article',
+        icon: 'form'
       }
     }]
   }

@@ -82,6 +82,7 @@ p {
 import { getRoomList } from '@/api/room'
 
 export default {
+  name: 'Home',
   data () {
     return {
       currentDate: '今日直播',
