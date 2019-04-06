@@ -74,7 +74,6 @@
 
 <script>
 export default {
-  name: 'roomManager',
   data () {
     return {
       inputSearch: '',
@@ -88,34 +87,29 @@ export default {
           prop: 'username'
         },
         {
-          label: '姓名',
+          label: '昵称',
           prop: 'nickname'
         },
         {
-          label: '状态',
-          prop: 'status'
+          label: '身份',
+          prop: 'role'
         },
         {
           label: '创建时间',
           prop: 'created_at'
         },
         {
-          label: '关注人数',
-          prop: 'foucs_amount'
-        },
-        {
-          label: '在线人数',
-          prop: 'online_amount'
+          label: 'email',
+          prop: 'email'
         }
       ],
       tableData: [{
         id: 123,
         username: 'sans',
         nickname: '123',
-        status: '正在休息',
+        role: 'admin',
         created_at: '2019-04-13',
-        focus_amount: 10,
-        online_amount: 1
+        email: 'sansroman@foxmail.com'
       }],
       count: 1,
       loading: false

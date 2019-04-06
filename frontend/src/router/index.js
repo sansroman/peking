@@ -85,12 +85,28 @@ const asyncRouters = [
         component: () => import('@/pages/subView/StudentManager')
       },
       {
-        name: 'roomManager',
-        path: 'roomManager',
+        name: 'myRoom',
+        path: 'myRoom',
         meta: {
           roles: ['teacher']
         },
+        component: () => import('@/pages/subView/MyRoom')
+      },
+      {
+        name: 'roomManager',
+        path: 'roomManager',
+        meta: {
+          roles: ['admin']
+        },
         component: () => import('@/pages/subView/RoomManager')
+      },
+      {
+        name: 'userManager',
+        path: 'userManager',
+        meta: {
+          roles: ['admin']
+        },
+        component: () => import('@/pages/subView/UserManager')
       }
     ]
   }
