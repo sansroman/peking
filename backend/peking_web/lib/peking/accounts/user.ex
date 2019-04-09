@@ -16,5 +16,6 @@ defmodule Peking.Accounts.User do
     user
     |> cast(attrs, [:username, :nickname, :email])
     |> validate_required([:username, :nickname, :email])
+    |> validate_length
   end
 end
