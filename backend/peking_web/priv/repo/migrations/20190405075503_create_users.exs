@@ -5,8 +5,6 @@ defmodule Peking.Repo.Migrations.CreateUsers do
     create table(:users) do
       add :nickname, :string
       add :username, :string, null: false
-      add :email, :string, null: false
-
 
       timestamps()
     end
