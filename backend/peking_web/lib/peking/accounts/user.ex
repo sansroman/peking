@@ -6,7 +6,7 @@ defmodule Peking.Accounts.User do
   schema "users" do
     field :nickname, :string
     field :username, :string
-    has_one :credentials, Credential
+    has_one :credential, Credential
 
     timestamps()
   end
@@ -22,6 +22,6 @@ defmodule Peking.Accounts.User do
   def registration_changeset(user, params) do
     user
     |> changeset(params)
-    |> cast_assoc(:credentials, with: &Credential.changeset/2, required: true)
+    |> cast_assoc(:credential, with: &Credential.changeset/2, required: true)
   end
 end

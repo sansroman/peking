@@ -14,8 +14,8 @@ defmodule Peking.Accounts.Credential do
   @doc false
   def changeset(credential, attrs) do
     credential
-    |> cast(attrs, [:email, :password_hash])
-    |> validate_required([:email, :password_hash])
+    |> cast(attrs, [:email, :password])
+    |> validate_required([:email, :password])
     |> validate_length(:password, min: 6, max: 100)
     |> unique_constraint(:email)
     |> put_pass_hash()

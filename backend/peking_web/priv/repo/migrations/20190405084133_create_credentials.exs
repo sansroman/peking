@@ -10,7 +10,5 @@ defmodule Peking.Repo.Migrations.CreateCredentials do
       timestamps()
     end
 
-    create unique_index(:credentials, [:email])
-    create index(:credentials, [:user_id])
   end
 end

@@ -14,6 +14,6 @@ defmodule PekingWeb.UserView do
     %{id: user.id,
       username: user.username,
       nickname: user.nickname,
-      email: user.email}
+      email: user.credential.email}
   end
 end
