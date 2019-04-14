@@ -49,12 +49,6 @@ defmodule Peking.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_user(attrs \\ %{}) do
-    %User{}
-    |> User.changeset(attrs)
-    |> Repo.insert()
-  end
-
   def register_user(attrs \\ %{}) do
     %User{}
     |> User.registration_changeset(attrs)

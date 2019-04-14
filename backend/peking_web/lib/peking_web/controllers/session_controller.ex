@@ -10,7 +10,7 @@ defmodule PekingWeb.SessionController do
       {:ok, conn} ->
         conn
         |> put_flash(:info, "Welcome back!")
-        |> render :success
+        |> render :session
       {:error, _reason, conn} ->
         conn
         |> put_flash(:error, "Invalid email/password combination")

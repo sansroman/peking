@@ -21,6 +21,7 @@ defmodule PekingWeb.Router do
 
     get "/", PageController, :index
     resources "/sessions", SessionController, only: [:new, :create, :delete]
+    resources "/users", UserController, only: [:index, :show, :new, :create]
   end
 
   scope "/api", PekingWeb do

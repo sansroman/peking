@@ -13,6 +13,11 @@ defmodule PekingWeb.UserController do
     render(conn, "index.json", users: users)
   end
 
+  def new(conn, _) do
+    changeset = Accounts.change_user(%User{})
+    render(conn, "new.html", changeset: changeset)
+  end
+
   def create(conn, %{"user" => user_params}) do
     case Accounts.register_user(user_params) do
       {:ok, user} ->
@@ -21,7 +26,7 @@ defmodule PekingWeb.UserController do
         |> put_resp_header("location", Routes.user_path(conn, :show, user))
         |> render("show.json", user: user)
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(PekingWeb.ErrorView, "error.json", changeset: changeset)
+        render(conn, "new.html", changeset: changeset)
     end
   end
 
