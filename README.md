@@ -37,21 +37,21 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
   - [x] sidebar
   - [x] search_box
   - [x] room_card(click handle)
-- [ ] profile
+- [x] profile
   - [x] collection
   - [x] self_info
-  - [ ] teacher
+  - [x] teacher
   - [x] test
 - [ ] live video
   - [x] layout
-  - [ ] player
-  - [ ] editor
+  - [x] player
+  - [x] editor
   - [ ] danmu
 - [ ] dashborad
   - [ ] room_manager
   - [x] statistics
-  - [ ] student_manager
-  - [ ] test_manager
+  - [x] student_manager
+  - [x] test_manager
 
 ### Router:
 - [x] Authenticate
