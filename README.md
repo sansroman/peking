@@ -69,7 +69,6 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 #### User
 - id
 - email
-- phone
 - avatar
 - role
 - description
@@ -77,9 +76,10 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 - created_at
 - last_login_at
 
+
 #### Article
 - id
-- author_id
+- author_id(belong_to :user)
 - title
 - content
 - views
@@ -87,7 +87,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 #### Room
 - id
-- own_id
+- own_id(belong_to :user)
 - title
 - token
 - views
@@ -96,9 +96,15 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 - collection
 - last_start_at
 
-#### Room_collection
-
 #### Exercise
+- id
+- title
+- answer
+
+#### Question
+- id
+- title
+- answer
 
 #### Grade
 
