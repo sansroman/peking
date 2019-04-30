@@ -35,9 +35,9 @@ export default {
       if (
         first &&
         first.name.trim().toLocaleLowerCase() !==
-          'Dashboard'.toLocaleLowerCase()
+          'Home'.toLocaleLowerCase()
       ) {
-        matched = [{ path: '/dashboard', meta: { title: 'dashboard' } }].concat(
+        matched = [{ path: '/', meta: { title: 'home' } }].concat(
           matched
         )
       }
@@ -47,7 +47,6 @@ export default {
       )
     },
     pathCompile (path) {
-      // To solve this problem https://github.com/PanJiaChen/vue-element-admin/issues/561
       const { params } = this.$route
       const toPath = pathToRegexp.compile(path)
       return toPath(params)
