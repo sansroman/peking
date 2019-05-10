@@ -113,13 +113,13 @@ const asyncRouters = [
 ]
 const homeRouter = [
   {
-    path: '/',
+    path: '',
     component: Layout,
     children: [
       {
         path: '',
         component: () => import('@/pages/Home'),
-        name: 'Home',
+        name: 'home',
         meta: {
           title: 'Home',
           icon: 'lock'
@@ -185,7 +185,7 @@ const constantRouter = [
     children: [{
       path: ':id',
       name: 'room',
-      component: () => import('@/pages/Room')
+      component: () => import('@/pages/Room/Room.vue')
     }]
   }
 ]
