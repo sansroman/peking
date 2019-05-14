@@ -23,6 +23,7 @@ defmodule PekingWeb do
 
       import Plug.Conn
       import PekingWeb.Gettext
+      import PekingWeb.Auth, only: [authenticate_user: 2]
       alias PekingWeb.Router.Helpers, as: Routes
     end
   end
@@ -50,6 +51,7 @@ defmodule PekingWeb do
       use Phoenix.Router
       import Plug.Conn
       import Phoenix.Controller
+      import PekingWeb.Auth, only: [authenticate_user: 2]
     end
   end
 

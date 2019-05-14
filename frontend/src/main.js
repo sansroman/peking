@@ -12,6 +12,7 @@ import './mock'
 import App from './App'
 import router from './router'
 import store from './store'
+import './assets/reset.scss'
 
 Vue.config.productionTip = false
 

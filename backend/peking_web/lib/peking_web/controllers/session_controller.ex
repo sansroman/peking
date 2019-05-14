@@ -10,11 +10,17 @@ defmodule PekingWeb.SessionController do
       {:ok, conn} ->
         conn
         |> put_flash(:info, "Welcome back!")
-        |> render :session
+        |> redirect(to: Routes.page_path(conn, :index))
       {:error, _reason, conn} ->
         conn
         |> put_flash(:error, "Invalid email/password combination")
         |> render :error
     end
+  end
+
+  def delete(conn, _) do
+    conn
+    |> PekingWeb.Auth.logout()
+    |> redirect(to: Routes.page_path(conn, :index))
   end
 end

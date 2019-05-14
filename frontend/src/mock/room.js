@@ -211,5 +211,15 @@ const roomMap = [
 function getRoomList () {
   return roomMap
 }
-
-export { getRoomList }
+function getRoomInfo (req) {
+  return {
+    title: '线性代数第一章',
+    cover: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+    online: 102,
+    ranking: req.url.split('/').pop(),
+    category: '高等数学',
+    owner: '李永乐老师',
+    collected: true
+  }
+}
+export { getRoomList, getRoomInfo }

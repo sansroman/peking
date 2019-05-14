@@ -1,6 +1,8 @@
 defmodule PekingWeb.Auth do
+  import Phoenix.Controller
   import Plug.Conn
   alias Peking.Accounts
+  alias PekingWeb.Router.Helpers, as: Routes
 
   def init(opts), do: opts
 
@@ -26,5 +28,21 @@ defmodule PekingWeb.Auth do
       {:error, :not_found} ->
         {:error, :not_found, conn}
     end
+  end
+
+  def logout(conn) do
+    configure_session(conn, drop: true)
+  end
+
+  def authenticate_user(conn, _opts) do
+    if conn.assigns.current_user do
+      conn
+    else
+      conn
+      |> put_status(403)
+      |> redirect(to: Routes.page_path(conn, :index))
+      |> halt()
+    end
+
   end
 end

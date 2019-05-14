@@ -1,6 +1,6 @@
-defmodule PekingWeb.UserController do
+defmodule PekingWeb.Api.UserController do
   use PekingWeb, :controller
-  plug :authenticate_user when action in [:index, :show]
+  plug :authenticate_user when action in [:index, :show, :my_room]
 
   alias Peking.Accounts
   alias Peking.Accounts.User
@@ -10,13 +10,9 @@ defmodule PekingWeb.UserController do
 
   def index(conn, _params) do
     users = Accounts.list_users()
-    render(conn, "index.html", users: users)
+    render(conn, "index.json", users: users)
   end
 
-  def new(conn, _) do
-    changeset = Accounts.change_user(%User{})
-    render(conn, "new.html", changeset: changeset)
-  end
 
   def create(conn, %{"user" => user_params}) do
     case Accounts.register_user(user_params) do
@@ -24,22 +20,22 @@ defmodule PekingWeb.UserController do
         conn
         |> put_status(:created)
         |> put_resp_header("location", Routes.user_path(conn, :show, user))
-        |> render("show.html", user: user)
+        |> render("show.json", user: user)
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        render(conn, "error.json", changeset: changeset)
     end
   end
 
   def show(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)
-    render(conn, "show.html", user: user)
+    render(conn, "show.json", user: user)
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
     user = Accounts.get_user!(id)
 
     with {:ok, %User{} = user} <- Accounts.update_user(user, user_params) do
-      render(conn, "show.html", user: user)
+      render(conn, "show.json", user: user)
     end
   end
 
@@ -50,4 +46,5 @@ defmodule PekingWeb.UserController do
       send_resp(conn, :no_content, "")
     end
   end
+
 end

@@ -20,15 +20,18 @@ defmodule PekingWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    resources "/sessions", SessionController, only: [:new, :create, :delete]
-    resources "/users", UserController, only: [:index, :show, :new, :create]
+    resources "/sessions", SessionController
+    resources "/users", UserController
+    resources "/rooms", RoomController
   end
 
-  scope "/api", PekingWeb do
+  scope "/api", PekingWeb.Api do
     pipe_through :api
 
-    resources "/users", UserController, only: [:index, :show, :new, :create]
-    resources "/sessions", SessionController, only: [:create, :delete]
+    resources "/users", UserController
+    resources "/sessions", SessionController
+    resources "/rooms", RoomController
+    post "/discuss",  RoomController, :discuss
   end
 
   # Other scopes may use custom stacks.

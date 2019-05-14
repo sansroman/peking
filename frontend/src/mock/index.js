@@ -7,6 +7,7 @@ Mock.mock(/\/api\/login/, 'post', loginAPI.loginByUsername)
 Mock.mock(/\/api\/logout/, 'post', loginAPI.logout)
 Mock.mock(/\/api\/user\/info\.*/, 'get', loginAPI.getUserInfo)
 
+Mock.mock(/\/api\/rooms\/.+/, 'get', roomAPI.getRoomInfo)
 Mock.mock(/\/api\/rooms/, 'get', roomAPI.getRoomList)
 
 Mock.mock(/\/api\/article\/list/, 'get', articleAPI.getList)

@@ -6,5 +6,11 @@ function getRoomList () {
     method: 'get'
   })
 }
+function getRoomInfo (id) {
+  return axios({
+    url: `/api/rooms/${id}`,
+    method: 'get'
+  })
+}
 
-export { getRoomList }
+export { getRoomList, getRoomInfo }

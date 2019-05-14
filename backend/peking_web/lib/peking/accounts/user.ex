@@ -2,11 +2,13 @@ defmodule Peking.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
   alias Peking.Accounts.Credential
+  alias Peking.Rooms.Room
 
   schema "users" do
     field :nickname, :string
     field :username, :string
     has_one :credential, Credential
+    has_one :room, Room
 
     timestamps()
   end

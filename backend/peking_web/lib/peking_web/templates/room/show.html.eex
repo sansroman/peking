@@ -1,0 +1,38 @@
+<h1>Show Room</h1>
+
+<ul>
+
+  <li>
+    <strong>Owner:</strong>
+    <%= @room.user.nickname %>
+  </li>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @room.title %>
+  </li>
+
+  <li>
+    <strong>Cover:</strong>
+    <%= @room.cover %>
+  </li>
+
+  <li>
+    <strong>Desc:</strong>
+    <%= @room.desc %>
+  </li>
+
+  <li>
+    <strong>Category:</strong>
+    <%= @room.category %>
+  </li>
+
+  <li>
+    <strong>Hot:</strong>
+    <%= @room.hot %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.room_path(@conn, :edit, @room) %></span>
+<span><%= link "Back", to: Routes.room_path(@conn, :index) %></span>
