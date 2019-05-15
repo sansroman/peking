@@ -57,3 +57,4 @@ peking_web/priv/static/
 # secrets files as long as you replace their contents by environment
 # variables.
 peking_web/config/*.secret.exs
+secret.json

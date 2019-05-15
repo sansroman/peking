@@ -2,11 +2,11 @@
   <div class="login-container">
     <el-dialog v-el-drag-dialog :visible.sync="dialogTableVisible" title="注册" @dragDialog="handleDrag">
       <el-form :model="userInfo">
-        <el-form-item prop="username">
+        <el-form-item prop="email">
           <md-input
-            v-model="userInfo.username"
+            v-model="userInfo.email"
             icon="info"
-            name="username"
+            name="email"
             placeholder="输入名称"
           >用户名称</md-input>
         </el-form-item>
@@ -15,9 +15,6 @@
         </el-form-item>
         <el-form-item prop="email">
           <md-input v-model="userInfo.email" icon="info" name="email" placeholder="输入名称">个人邮箱</md-input>
-        </el-form-item>
-        <el-form-item prop="phone">
-          <md-input v-model="userInfo.phone" icon="info" name="phone" placeholder="输入名称">手机号码</md-input>
         </el-form-item>
         <el-button type="primary">提交</el-button>
         <el-button>重置</el-button>
@@ -36,14 +33,14 @@
         <h3 class="title">系统登录</h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="email">
         <span class="svg-container">
           <svg-icon icon-class="user"/>
         </span>
         <el-input
-          v-model="loginForm.username"
+          v-model="loginForm.email"
           :placeholder="'账号'"
-          name="username"
+          name="email"
           type="text"
           auto-complete="on"
         />
@@ -74,7 +71,6 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
 import elDragDialog from '@/directive/drag'
 import MdInput from '@/components/MdInput'
 
@@ -83,13 +79,6 @@ export default {
   directives: { elDragDialog },
   components: { MdInput },
   data () {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
-    }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
         callback(new Error('The password can not be less than 6 digits'))
@@ -99,12 +88,12 @@ export default {
     }
     return {
       loginForm: {
-        username: 'student',
-        password: '1111111'
+        email: '',
+        password: ''
       },
       loginRules: {
-        username: [
-          { required: true, trigger: 'blur', validator: validateUsername }
+        email: [
+          { required: true, trigger: 'blur' }
         ],
         password: [
           { required: true, trigger: 'blur', validator: validatePassword }
@@ -131,7 +120,7 @@ export default {
         if (valid) {
           this.loading = true
           this.$store
-            .dispatch('LoginByUsername', this.loginForm)
+            .dispatch('LoginByEmail', this.loginForm)
             .then(() => {
               this.loading = false
               this.$router.push({ path: this.redirect || '/' })

@@ -180,6 +180,10 @@ const constantRouter = [
     component: () => import('@/pages/404')
   },
   {
+    path: '/401',
+    component: () => import('@/pages/401')
+  },
+  {
     path: '/room',
     component: Layout,
     children: [{

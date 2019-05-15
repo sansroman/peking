@@ -6,7 +6,7 @@ defmodule PekingWeb.RoomController do
   alias Peking.Rooms
   alias Peking.Rooms.Room
 
-  def index(conn, _params, current_user) do
+  def index(conn, _params, _current_user) do
     rooms = Rooms.list_rooms()
     render(conn, "index.html", rooms: rooms)
   end
@@ -28,7 +28,7 @@ defmodule PekingWeb.RoomController do
     end
   end
 
-  def show(conn, %{"id" => id}, current_user) do
+  def show(conn, %{"id" => id}, _current_user) do
     room = Rooms.get_room!(id)
     render(conn, "show.html", room: room)
   end
@@ -39,7 +39,7 @@ defmodule PekingWeb.RoomController do
     render(conn, "edit.html", room: room, changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "room" => room_params}, current_user) do
+  def update(conn, %{"id" => id, "room" => room_params}, _current_user) do
     room = Rooms.get_room!(id)
 
     case Rooms.update_room(room, room_params) do
@@ -53,7 +53,7 @@ defmodule PekingWeb.RoomController do
     end
   end
 
-  def delete(conn, %{"id" => id}, current_user) do
+  def delete(conn, %{"id" => id}, _current_user) do
     room = Rooms.get_room!(id)
     {:ok, _room} = Rooms.delete_room(room)
 

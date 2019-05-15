@@ -1,8 +1,8 @@
 import axios from 'axios'
 
-function loginByUsername (username, password) {
+function loginByEmail (email, password) {
   const data = {
-    username,
+    email,
     password
   }
   return axios({
@@ -14,15 +14,14 @@ function loginByUsername (username, password) {
 function logout () {
   return axios({
     url: '/api/logout',
-    method: 'post'
+    method: 'get'
   })
 }
-function getUserInfo (token) {
+function getUserInfo (id) {
   return axios({
-    url: '/api/user/info',
-    method: 'get',
-    params: { token }
+    url: `/api/users/${id}`,
+    method: 'get'
   })
 }
 
-export { loginByUsername, logout, getUserInfo }
+export { loginByEmail, logout, getUserInfo }

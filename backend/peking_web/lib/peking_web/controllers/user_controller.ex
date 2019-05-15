@@ -35,6 +35,12 @@ defmodule PekingWeb.UserController do
     render(conn, "show.html", user: user)
   end
 
+  def edit(conn, %{"id" => id}) do
+    user = Accounts.get_user!(id)
+    changeset = Accounts.change_user(user)
+    render(conn, "edit.html", user: user, changeset: changeset)
+  end
+
   def update(conn, %{"id" => id, "user" => user_params}) do
     user = Accounts.get_user!(id)
 

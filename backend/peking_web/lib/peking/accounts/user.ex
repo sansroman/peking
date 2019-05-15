@@ -7,8 +7,12 @@ defmodule Peking.Accounts.User do
   schema "users" do
     field :nickname, :string
     field :username, :string
+    field :avatar, :string
+    field :introduction, :string
+    field :role, :integer
+
     has_one :credential, Credential
-    has_one :room, Room
+    has_one :room, Room, on_replace: :update
 
     timestamps()
   end
@@ -16,8 +20,8 @@ defmodule Peking.Accounts.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:username, :nickname])
-    |> validate_required([:username, :nickname])
+    |> cast(attrs, [:username, :nickname, :role, :avatar, :introduction])
+    |> validate_required([:username, :nickname, :role])
     |> validate_length(:username, min: 5, max: 20)
   end
 

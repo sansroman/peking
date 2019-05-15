@@ -7,7 +7,7 @@
         :key="index"
         :offset="index % 5 === 0 ? 0 : 1"
       >
-        <div @click="enterRoom(o.room_id)">
+        <div @click="enterRoom(o.id)">
           <el-card :body-style="{ padding: '0px', height: '20pxs'}" shadow="hover">
             <img src="@/assets/logo.png" class="image">
             <div class="footer">
@@ -94,7 +94,7 @@ export default {
   },
   methods: {
     getRoomList () {
-      getRoomList().then(res => (this.roomList = res.data))
+      getRoomList().then(res => (this.roomList = res.data.data))
     },
     enterRoom (roomID) {
       this.$router.push({ path: `/room/${roomID}` })

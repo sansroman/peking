@@ -2,6 +2,7 @@ import { getToken } from '@/utils/auth'
 import { Message } from 'element-ui'
 import store from './store'
 import router from './router'
+const ROLE = ['student', 'teacher', 'admin']
 
 function hasPermission (roles, permissionRoles) {
   if (roles.indexOf('admin') >= 0) return true // admin permission passed directly
@@ -17,7 +18,7 @@ router.beforeEach((to, from, next) => {
       next({ path: '/' })
     } else if (store.getters.roles.length === 0) { // 判断当前用户是否已拉取完user_info信息
       store.dispatch('GetUserInfo').then(res => { // 拉取user_info
-        const roles = res.data.roles // note: roles must be a array! such as: ['editor','develop']
+        const roles = [ROLE[res.data.data.role]] // note: roles must be a array! such as: ['editor','develop']
         store.dispatch('GenerateRoutes', { roles }).then(() => { // 根据roles权限生成可访问的路由表
           router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
           next({ ...to, replace: true })

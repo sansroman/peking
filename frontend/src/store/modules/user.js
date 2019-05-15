@@ -1,6 +1,7 @@
 /* eslint-disable prefer-promise-reject-errors */
-import { loginByUsername, logout, getUserInfo } from '@/api/login'
+import { loginByEmail, logout, getUserInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+const ROLE = ['student', 'teacher', 'admin']
 
 const user = {
   state: {
@@ -13,6 +14,7 @@ const user = {
     avatar: '',
     introduction: '',
     roles: [],
+    room: {},
     setting: {
       articlePlatform: []
     }
@@ -45,19 +47,22 @@ const user = {
     },
     SET_UID: (state, uid) => {
       state.uid = uid
+    },
+    SET_ROOM: (state, room) => {
+      state.room = room
     }
   },
 
   actions: {
     // 用户名登录
-    LoginByUsername ({ commit }, userInfo) {
-      const username = userInfo.username.trim()
+    LoginByEmail ({ commit }, userInfo) {
+      const email = userInfo.email.trim()
       return new Promise((resolve, reject) => {
-        loginByUsername(username, userInfo.password)
+        loginByEmail(email, userInfo.password)
           .then(response => {
-            const data = response.data
-            commit('SET_TOKEN', data.token)
-            setToken(response.data.token)
+            const data = response.data.data
+            commit('SET_TOKEN', data.uid)
+            setToken(data.uid)
             resolve()
           })
           .catch(error => {
@@ -72,20 +77,17 @@ const user = {
         getUserInfo(state.token)
           .then(response => {
             // 由于mockjs 不支持自定义状态码只能这样hack
-            if (!response.data) {
+            const data = response.data.data
+            if (data.status) {
               reject('Verification failed, please login again.')
             }
-            const data = response.data
-            if (data.roles && data.roles.length > 0) {
-              // 验证返回的roles是否是一个非空数组
-              commit('SET_ROLES', data.roles)
-            } else {
-              reject('getInfo: roles must be a non-null array!')
-            }
-            commit('SET_UID', data.uid)
-            commit('SET_NAME', data.name)
+
+            commit('SET_ROLES', [ROLE[data.role]])
+            commit('SET_UID', data.id)
+            commit('SET_NAME', data.nickname)
             commit('SET_AVATAR', data.avatar)
             commit('SET_INTRODUCTION', data.introduction)
+            commit('SET_ROOM', data.room)
             resolve(response)
           })
           .catch(error => {

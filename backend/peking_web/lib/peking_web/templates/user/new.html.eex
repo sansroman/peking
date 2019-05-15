@@ -15,6 +15,11 @@
     <%= text_input f, :nickname, placeholder: "Nickname" %>
     <%= error_tag f, :nickname %>
   </div>
+    <div>
+    <%= text_input f, :role, placeholder: "Role" %>
+    <%= error_tag f, :role %>
+  </div>
+
   <div>
     <%= inputs_for f, :credential, fn cf -> %>
       <%= text_input cf, :email, placeholder: "Email" %>

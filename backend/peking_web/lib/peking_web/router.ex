@@ -29,9 +29,13 @@ defmodule PekingWeb.Router do
     pipe_through :api
 
     resources "/users", UserController
-    resources "/sessions", SessionController
+    post "/login", SessionController, :create
+    get "/logout", SessionController, :delete
+    post "/rooms/discuss",  RoomController, :discuss
+    post "/rooms/quiz",  RoomController, :quiz
+    post "/rooms/start",  RoomController, :start
+    post "/rooms/live_cb",  RoomController, :live_cb
     resources "/rooms", RoomController
-    post "/discuss",  RoomController, :discuss
   end
 
   # Other scopes may use custom stacks.

@@ -16,6 +16,7 @@ defmodule PekingWeb.Api.RoomView do
       cover: room.cover,
       desc: room.desc,
       category: room.category,
+      status: room.status,
       hot: room.hot}
   end
 end

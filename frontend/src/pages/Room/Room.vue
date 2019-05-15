@@ -2,7 +2,7 @@
   <div class="live_basic" :style="{height:live_basic_height+'px'}">
     <el-dialog v-el-drag-dialog :visible.sync="editorVisible" title="编辑器">
       <div class="title">
-        <span>请谈谈你对线性代数这门科学的看法</span>
+        <span>{{topic}}</span>
       </div>
       <markdown-editor
         ref="markdownEditor"
@@ -28,7 +28,7 @@
                 <el-col :span="18">
                   <el-row>
                     <el-col :span="2" style="overflow:hidden;">
-                      <el-tag size="mini" type="success" style="margin-top:5px;">直播</el-tag>
+                      <el-tag size="mini" :type="live.status ? 'success' : 'info' " style="margin-top:5px;">{{live.status? '直播' : '休息'}}</el-tag>
                     </el-col>
                     <el-col :span="8">
                       <h1>{{live.title}}</h1>
@@ -133,6 +133,7 @@ export default {
   directives: { elDragDialog },
   data () {
     return {
+      topic: '',
       editorVisible: false,
       live_basic_height: 800,
       left: 18,
@@ -154,7 +155,11 @@ export default {
   methods: {
     getRoomInfo () {
       getRoomInfo(this.$route.params.id).then(res => {
-        this.live = res.data
+        this.live = {
+          online: 102,
+          ranking: 10,
+          ...res.data.data
+        }
       })
     },
     joinChannel () {
@@ -166,6 +171,8 @@ export default {
         .receive('ok', resp => console.log('Joined successfully', resp))
         .receive('error', resp => console.log('Unable to join', resp))
       this.channel.on('new_msg', this.handleMsg)
+      this.channel.on('discuss_start', this.handleDiscuss)
+      this.channel.on('quiz', this.handleQuiz)
     },
     connectVideo () {
       if (flvjs.isSupported()) {
@@ -189,6 +196,10 @@ export default {
       this.rightshow = true
       this.surplusTime = time
       this.discuss_title = title
+    },
+    handleQuiz ({ topic }) {
+      this.topic = topic
+      this.textshow = true
     },
     sendMessage () {
       const uid = this.$store.state.user.uid

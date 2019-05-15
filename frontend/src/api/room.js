@@ -13,4 +13,12 @@ function getRoomInfo (id) {
   })
 }
 
-export { getRoomList, getRoomInfo }
+function startLive (data) {
+  return axios({
+    url: `/api/rooms/start`,
+    method: 'post',
+    data
+  })
+}
+
+export { getRoomList, getRoomInfo, startLive }

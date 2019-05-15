@@ -25,6 +25,10 @@
   <%= checkbox f, :hot %>
   <%= error_tag f, :hot %>
 
+  <%= label f, :status %>
+  <%= checkbox f, :status %>
+  <%= error_tag f, :status %>
+
   <div>
     <%= submit "Save" %>
   </div>

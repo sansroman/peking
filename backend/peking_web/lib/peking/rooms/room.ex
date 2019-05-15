@@ -8,8 +8,9 @@ defmodule Peking.Rooms.Room do
     field :desc, :string
     field :category, :string
     field :hot, :boolean, default: false
+    field :status, :boolean, default: false
     field :title, :string
-    belongs_to :user, Peking.Accounts.User
+    belongs_to :user, Peking.Accounts.User, on_replace: :delete
 
 
     timestamps()
@@ -18,7 +19,7 @@ defmodule Peking.Rooms.Room do
   @doc false
   def changeset(room, attrs) do
     room
-    |> cast(attrs, [:title, :cover, :desc, :category, :hot])
-    |> validate_required([:title, :cover, :desc, :category, :hot])
+    |> cast(attrs, [:title, :cover, :desc, :category, :hot, :status])
+    |> validate_required([:title, :cover, :desc, :category, :hot, :status])
   end
 end

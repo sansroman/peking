@@ -13,6 +13,10 @@
   <%= text_input f, :nickname %>
   <%= error_tag f, :nickname %>
 
+  <%= label f, :role %>
+  <%= text_input f, :role %>
+  <%= error_tag f, :role %>
+
   <div>
     <%= submit "Save" %>
   </div>

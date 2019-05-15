@@ -2,7 +2,7 @@
   <div class="components-container">
     <el-row class="header">
       <el-col :span="8">
-        <pan-thumb :image="image"/>
+        <pan-thumb :image="avatar"/>
 
         <el-button
           type="primary"
@@ -102,10 +102,14 @@ import MdInput from '@/components/MdInput'
 import BoxCard from '@/components/BoxCard'
 import PanelGroup from '@/components/PanelGroup'
 import PieChart from '@/components/PieChart'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Setting',
   components: { ImageCropper, PanThumb, MdInput, BoxCard, PanelGroup, PieChart },
+  computed: {
+    ...mapGetters(['name', 'avatar'])
+  },
   data () {
     const validate = (rule, value, callback) => {
       if (value.length !== 6) {
@@ -117,7 +121,6 @@ export default {
     return {
       imagecropperShow: false,
       imagecropperKey: 0,
-      image: 'https://wpimg.wallstcn.com/577965b9-bb9e-4e02-9f0c-095b41417191',
       userInfo: {},
       userInfoRules: {
         username: [{ required: true, trigger: 'change', validator: validate }],
