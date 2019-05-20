@@ -14,7 +14,9 @@
               <h4>{{o.title}}</h4>
               <p>
                 {{o.desc.length > 10 ? `${o.desc.substring(0, 10)}...` : o.desc}}
-                <span class="popular">{{o.online}}</span>
+                <span
+                  class="popular"
+                >{{o.online}}</span>
               </p>
             </div>
           </el-card>
@@ -79,7 +81,7 @@ p {
 </style>
 
 <script>
-import { getRoomList } from '@/api/room'
+import { getRoomList, getHotList, getStarList } from '@/api/room'
 
 export default {
   name: 'Home',
@@ -90,12 +92,15 @@ export default {
     }
   },
   mounted () {
-    this.getRoomList()
+    if (this.$route.name === 'hot') {
+      getHotList().then(res => (this.roomList = res.data.data))
+    } else if (this.$route.name === 'star') {
+      getStarList().then(res => (this.roomList = res.data.data))
+    } else {
+      getRoomList().then(res => (this.roomList = res.data.data))
+    }
   },
   methods: {
-    getRoomList () {
-      getRoomList().then(res => (this.roomList = res.data.data))
-    },
     enterRoom (roomID) {
       this.$router.push({ path: `/room/${roomID}` })
     }

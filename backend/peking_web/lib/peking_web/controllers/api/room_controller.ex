@@ -1,9 +1,10 @@
 defmodule PekingWeb.Api.RoomController do
   use PekingWeb, :controller
-  plug :authenticate_user
+  plug :authenticate_user when action not in [:index, :live_cb]
 
   alias Peking.Rooms
   alias Peking.Rooms.Room
+  alias Peking.UserRoom
 
   action_fallback PekingWeb.FallbackController
 
@@ -22,7 +23,13 @@ defmodule PekingWeb.Api.RoomController do
 
   def show(conn, %{"id" => id}) do
     room = Rooms.get_room!(id)
-    render(conn, "show.json", room: room)
+
+    case Rooms.has_collected(get_session(conn, :user_id), id) do
+      %UserRoom{} ->
+        render(conn, "show.json", room: room, has_collection: true)
+      _ ->
+        render(conn, "show.json", room: room, has_collection: false)
+    end
   end
 
   def update(conn, %{"id" => id, "room" => room_params}) do
@@ -41,23 +48,18 @@ defmodule PekingWeb.Api.RoomController do
     end
   end
 
-  def discuss(conn, %{"title" => title, "time"=> time}) do
+  def discuss(conn, %{"title" => title, "time" => time}) do
     case conn.assigns.current_user do
-      %{:room => room} ->
-        PekingWeb.Endpoint.broadcast!("room:" <> Integer.to_string(room.id), "discuss_start", %{title: title, time: time})
-        json(conn, %{status: true, room_id: room.id})
-      _ ->
-        json(conn, %{status: false, error: "doesn't have room"})
-    end
-  end
+      %{:room => %{status: true, id: id}} ->
+        PekingWeb.Endpoint.broadcast!("room:" <> Integer.to_string(id), "discuss_start", %{
+          title: title,
+          time: time
+        })
 
-  def quiz(conn, %{"topic" => topic}) do
-    case conn.assigns.current_user do
-      %{:room => room} ->
-        PekingWeb.Endpoint.broadcast!("room:" <> Integer.to_string(room.id), "quiz", %{topic: topic})
-        json(conn, %{status: true, error: ""})
+        json(conn, %{status: true, room_id: id})
+
       _ ->
-        json(conn, %{status: false, error: "doesn't have room"})
+        json(conn, %{status: false, error: "doesn't have room or not living"})
     end
   end
 
@@ -71,18 +73,82 @@ defmodule PekingWeb.Api.RoomController do
           _ ->
             json(conn, %{status: false, error: "doesn't have room"})
         end
+
       _ ->
         json(conn, %{status: false, error: "doesn't have room"})
     end
   end
 
-  def live_cb(conn, %{"token" => token, "room_id" => room_id}) do
-    with {:ok, ^room_id} <- Phoenix.Token.verify(PekingWeb.Endpoint, "token", token, max_age: 1800) do
-      json(conn, %{status: true, data: "room:#{room_id} started"})
+  def stop(conn, _) do
+    case conn.assigns.current_user do
+      %{:room => room} ->
+        with {:ok, %Room{} = room} <- Rooms.update_room(room, %{status: false})
+        do
+          json(conn, %{status: true, data: "room:#{room.id} stopped"})
+        else
+          _ ->
+            json(conn, %{status: false, error: "stopped error"})
+        end
+      _ ->
+        json(conn, %{status: false, error: "doesn't have room"})
+    end
+  end
+
+  def live_cb(conn, %{"token" => token, "id" => id}) do
+    {room_id, _} = Integer.parse(id)
+    with room <- Rooms.get_room!(id),
+         {:ok, ^room_id} <- Phoenix.Token.verify(PekingWeb.Endpoint, "token", token, max_age: 1800),
+         {:ok, %Room{} = room} <- Rooms.update_room(room, %{status: true})
+    do
+      json(conn, %{status: true, data: "room:#{room.id} started"})
     else
       _ ->
         json(conn, %{status: false, error: "token error"})
     end
+  end
 
+  def collect(conn, %{"room_id" => room_id}) do
+    {room_id, _} = Integer.parse(room_id)
+    case conn
+      |> get_session(:user_id)
+      |> Rooms.collect(room_id)
+    do
+      {:ok, _} ->
+        json(conn, %{status: true, data: "collect successful"})
+      _ ->
+      json(conn, %{status: false, data: "collect failed"})
+    end
+
+  end
+
+  def cancel_collect(conn, %{"room_id" => room_id}) do
+    case conn
+    |> get_session(:user_id)
+    |> Rooms.cancel_collect(room_id)
+    do
+      {:ok, _} ->
+      json(conn, %{status: true, data: "cancel successful"})
+      _ ->
+      json(conn, %{status: false, data: "cancel failed"})
+    end
+  end
+
+
+
+  def hot(conn, _) do
+    rooms = Rooms.hot()
+    render(conn, "index.json", rooms: rooms)
+  end
+
+  def my_collect(conn, _) do
+    %{rooms: rooms} = conn
+      |> get_session(:user_id)
+      |> Rooms.my_collect()
+    render(conn, "index.json", rooms: rooms)
+  end
+
+  def users(conn, %{"room_id" => room_id}) do
+    %{users: users} = Rooms.users(room_id)
+    json(conn, %{users: users})
   end
 end

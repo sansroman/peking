@@ -5,6 +5,7 @@ defmodule PekingWeb.RoomController do
 
   alias Peking.Rooms
   alias Peking.Rooms.Room
+  alias Peking.UserRoom
 
   def index(conn, _params, _current_user) do
     rooms = Rooms.list_rooms()

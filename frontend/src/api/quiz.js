@@ -2,7 +2,15 @@ import axios from 'axios'
 
 function fetchList (query) {
   return axios({
-    url: '/api/article/list',
+    url: '/api/answers/me',
+    method: 'get',
+    params: query
+  })
+}
+
+function fetchQuiz (query) {
+  return axios({
+    url: '/api/answers/own',
     method: 'get',
     params: query
   })
@@ -32,11 +40,11 @@ function createArticle (data) {
   })
 }
 
-function updateArticle (data) {
+function updateAnswer (data) {
   return axios({
-    url: '/article/update',
-    method: 'post',
+    url: `/api/answers/${data.answer.id}`,
+    method: 'put',
     data
   })
 }
-export { fetchArticle, fetchList, fetchPv, createArticle, updateArticle }
+export { fetchArticle, fetchQuiz, fetchList, fetchPv, createArticle, updateAnswer }

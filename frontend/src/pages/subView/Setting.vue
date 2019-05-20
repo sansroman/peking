@@ -2,25 +2,15 @@
   <div class="components-container">
     <el-row class="header">
       <el-col :span="8">
-        <pan-thumb :image="avatar"/>
-
-        <el-button
-          type="primary"
-          icon="upload"
-          style="position: absolute;bottom: 15px;margin-left: 40px;"
-          @click="imagecropperShow=true"
-        >Change Avatar</el-button>
-
-        <image-cropper
-          v-show="imagecropperShow"
-          :width="300"
-          :height="300"
-          :key="imagecropperKey"
-          url="https://httpbin.org/post"
-          lang-type="en"
-          @close="close"
-          @crop-upload-success="cropSuccess"
-        />
+        <el-upload
+          class="avatar-uploader"
+          action=""
+          :http-request="handleupload"
+          :show-file-list="false"
+        >
+          <img v-if="avatar" :src="avatar" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
       </el-col>
       <el-col :span="16">
         <panel-group />
@@ -96,19 +86,20 @@
 </template>
 
 <script>
-import ImageCropper from '@/components/ImageCropper'
-import PanThumb from '@/components/PanThumb'
 import MdInput from '@/components/MdInput'
 import BoxCard from '@/components/BoxCard'
 import PanelGroup from '@/components/PanelGroup'
 import PieChart from '@/components/PieChart'
 import { mapGetters } from 'vuex'
+import COS from 'cos-js-sdk-v5'
+import { updateUserInfo } from '@/api/user'
+import { SecretId, SecretKey } from '../../../secret.json'
 
 export default {
   name: 'Setting',
-  components: { ImageCropper, PanThumb, MdInput, BoxCard, PanelGroup, PieChart },
+  components: { MdInput, BoxCard, PanelGroup, PieChart },
   computed: {
-    ...mapGetters(['name', 'avatar'])
+    ...mapGetters(['token', 'name', 'avatar'])
   },
   data () {
     const validate = (rule, value, callback) => {
@@ -141,6 +132,29 @@ export default {
     },
     onSubmit () {
 
+    },
+    handleupload (param) {
+      const cos = new COS({ SecretId, SecretKey })
+      const name = param.file.name
+      cos.putObject({
+        Bucket: 'liqiu-1251740680', /* 必须 */
+        Region: 'ap-beijing', /* 必须 */
+        Key: name, /* 必须 */
+        StorageClass: 'STANDARD',
+        Body: param.file, // 上传文件对象
+        onProgress: function (progressData) {
+          console.log(JSON.stringify(progressData))
+        }
+      }, (err, data) => {
+        if (err) alert('上传失败')
+        else {
+          updateUserInfo({ id: this.token, user: { avatar: `https://liqiu-1251740680.cos.ap-beijing.myqcloud.com/${name}` } }).then(result => {
+            this.$store.commit('SET_AVATAR', `https://liqiu-1251740680.cos.ap-beijing.myqcloud.com/${name}`)
+          }).catch(err => {
+            console.log(err)
+          })
+        }
+      })
     }
   }
 }

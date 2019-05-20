@@ -1,0 +1,13 @@
+<h1>Show Quiz</h1>
+
+<ul>
+
+  <li>
+    <strong>Topic:</strong>
+    <%= @quiz.topic %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.quiz_path(@conn, :edit, @quiz) %></span>
+<span><%= link "Back", to: Routes.quiz_path(@conn, :index) %></span>

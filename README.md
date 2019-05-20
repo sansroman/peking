@@ -30,28 +30,16 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 ## TODO:
 
 ### Page:
-- [x] 404
-- [x] signin
-- [x] home
-  - [x] navbar
-  - [x] sidebar
-  - [x] search_box
-  - [x] room_card(click handle)
-- [x] profile
-  - [x] collection
-  - [x] self_info
-  - [x] teacher
-  - [x] test
-- [ ] live video
-  - [x] layout
-  - [x] player
-  - [x] editor
-  - [ ] danmu
-- [ ] dashborad
-  - [ ] room_manager
-  - [x] statistics
-  - [x] student_manager
-  - [x] test_manager
+学生端:
+  - 查看作业
+  - 查看统计
+  - 关注直播间
+教师端
+  - 申请直播间
+  - 查看教学统计
+  - 查看学生
+管理端
+  - 管理直播间
 
 ### Router:
 - [x] Authenticate
@@ -60,10 +48,8 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 ### Function:
 - [x] Permission
 - [x] FetchData
-- [ ] Websocket
-- [ ] MediaServer
-- [ ] HighLight
-- [ ] AutoComplete
+- [x] Websocket
+- [x] MediaServer
 
 ### Model
 #### User

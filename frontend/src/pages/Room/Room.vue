@@ -55,9 +55,7 @@
                   </el-row>
                 </el-col>
                 <el-col :span="3">
-                  <Button type="primary" class="movie_butten">
-                    <svg-icon icon-class="star"/>关注
-                  </Button>
+                  <el-button type="warning" :icon="collection_status" @click="handleCollect" circle></el-button>
                 </el-col>
               </el-row>
             </div>
@@ -126,7 +124,7 @@
 import flvjs from 'flv.js'
 import elDragDialog from '@/directive/drag'
 import MarkdownEditor from '@/components/MarkdownEditor'
-import { getRoomInfo } from '@/api/room'
+import { getRoomInfo, commitQuiz, collect, cancelCollect } from '@/api/room'
 import { Socket } from 'phoenix-socket'
 
 export default {
@@ -149,17 +147,20 @@ export default {
       live: {},
       comments: [],
       radio: '1',
-      channel: {}
+      channel: {},
+      quiz_id: '',
+      hasCollection: false
     }
   },
   methods: {
     getRoomInfo () {
       getRoomInfo(this.$route.params.id).then(res => {
+        const { room, has_collection: hasCollection } = res.data.data
         this.live = {
-          online: 102,
           ranking: 10,
-          ...res.data.data
+          ...room
         }
+        this.hasCollection = hasCollection
       })
     },
     joinChannel () {
@@ -183,22 +184,28 @@ export default {
         })
         flvPlayer.attachMediaElement(videoElement)
         flvPlayer.load()
-        flvPlayer.play()
+        if (this.live.state) flvPlayer.play()
       }
     },
     handleMsg (resp) {
       this.comments.push(resp)
     },
     handleSubmit () {
-      this.editorVisible = false
+      commitQuiz({ quiz_id: this.quiz_id, anwser: { content: this.content } }).then(({ data, status, error }) => {
+        if (data.status) {
+          this.$message({ message: '提交成功', type: 'success' })
+          this.editorVisible = false
+        } else this.$message.error(data.error)
+      })
     },
     handleDiscuss ({ time, title }) {
       this.rightshow = true
       this.surplusTime = time
       this.discuss_title = title
     },
-    handleQuiz ({ topic }) {
+    handleQuiz ({ id, topic }) {
       this.topic = topic
+      this.quiz_id = id
       this.textshow = true
     },
     sendMessage () {
@@ -206,7 +213,7 @@ export default {
       this.channel.push('new_msg', { uid, body: this.user_comment })
       this.user_comment = ''
     },
-    changesmall: function (type) {
+    changesmall (type) {
       if (type) {
         this.rihgtshow = true
         this.left = 18
@@ -222,6 +229,23 @@ export default {
         this.leftheight = 1178
         this.live_basic_height = 950
       }
+    },
+    handleCollect () {
+      if (this.hasCollection) {
+        cancelCollect(this.$route.params.id).then(({ data, status, error }) => {
+          if (data.status) {
+            this.$message({ message: '取消成功', type: 'success' })
+            this.hasCollection = false
+          } else this.$message.error(data.error)
+        })
+      } else {
+        collect(this.$route.params.id).then(({ data, status, error }) => {
+          if (data.status) {
+            this.$message({ message: '收藏成功', type: 'success' })
+            this.hasCollection = true
+          } else this.$message.error(data.error)
+        })
+      }
     }
   },
   created () {
@@ -230,6 +254,11 @@ export default {
   mounted () {
     this.connectVideo()
     this.joinChannel()
+  },
+  computed: {
+    collection_status () {
+      return this.hasCollection ? 'el-icon-star-on' : 'el-icon-star-off'
+    }
   },
   components: { MarkdownEditor }
 }

@@ -20,7 +20,7 @@ defmodule Peking.Accounts do
   def list_users do
     User
     |> Repo.all()
-    |> Repo.preload(:room)
+    |> Repo.preload([:room, :rooms, :credential])
   end
 
   @doc """
@@ -40,7 +40,7 @@ defmodule Peking.Accounts do
   def get_user!(id) do
     User
     |> Repo.get!(id)
-    |> Repo.preload(:room)
+    |> Repo.preload([:room, :rooms, :credential])
   end
 
   @doc """

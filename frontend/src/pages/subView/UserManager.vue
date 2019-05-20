@@ -52,6 +52,7 @@
           align="center"
           :label="column.label"
           :prop="column.prop"
+          :formatter="column.formatter"
           :key="column.index"
         ></el-table-column>
       </template>
@@ -73,6 +74,9 @@
 </template>
 
 <script>
+
+import { getUserList } from '@/api/user'
+const ROLE = ['学生', '教师', '管理员']
 export default {
   data () {
     return {
@@ -91,32 +95,27 @@ export default {
           prop: 'nickname'
         },
         {
-          label: '身份',
-          prop: 'role'
-        },
-        {
           label: '创建时间',
           prop: 'created_at'
+        },
+        {
+          label: '身份',
+          prop: 'role',
+          formatter: row => ROLE[row.role]
         },
         {
           label: 'email',
           prop: 'email'
         }
       ],
-      tableData: [{
-        id: 123,
-        username: 'sans',
-        nickname: '123',
-        role: 'admin',
-        created_at: '2019-04-13',
-        email: 'sansroman@foxmail.com'
-      }],
+      tableData: [],
       count: 1,
       loading: false
     }
   },
-  async created () {},
-  mounted () {},
+  mounted () {
+    getUserList().then(res => (this.tableData = res.data.data))
+  },
   methods: {
     searchUser () {},
     resetAll () {},

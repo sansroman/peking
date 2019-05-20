@@ -8,6 +8,9 @@ defmodule Peking.Rooms do
 
   alias Peking.Rooms.Room
   alias Peking.Accounts
+  alias Peking.Accounts.User
+  alias Peking.Repo
+  alias Peking.UserRoom
 
   @doc """
   Returns the list of rooms.
@@ -22,6 +25,7 @@ defmodule Peking.Rooms do
     Room
     |> Repo.all()
     |> preload_user()
+    |> Repo.preload(:users)
   end
 
   @doc """
@@ -118,5 +122,52 @@ defmodule Peking.Rooms do
 
   defp preload_user(room) do
     Repo.preload(room, :user)
+  end
+
+
+  def collect(user_id, room_id) do
+    %UserRoom{}
+    |> UserRoom.changeset(%{user_id: user_id, room_id: room_id})
+    |> Repo.insert(on_conflict: :nothing)
+  end
+
+  def cancel_collect(user_id, room_id) do
+    from(u in UserRoom, where: [user_id: ^user_id, room_id: ^room_id])
+    |> Repo.one()
+    |> Repo.delete()
+  end
+
+  def has_collected(user_id, room_id) do
+    from(u in UserRoom, where: [user_id: ^user_id, room_id: ^room_id])
+    |> Repo.one()
+  end
+
+
+  def hot do
+    from(u in Room, where: [hot: true])
+    |> Repo.all()
+    |> preload_user()
+  end
+
+  def my_collect(user_id) do
+    User
+    |> Repo.get(user_id)
+    |> Repo.preload(:rooms)
+  end
+
+  def incoming(room_id) do
+    from(r in Room, update: [inc: [online: 1]], where: [id: ^room_id])
+    |> Repo.update_all([])
+  end
+
+  def outcoming(room_id) do
+    from(r in Room, update: [inc: [online: -1]], where: [id: ^room_id])
+    |> Repo.update_all([])
+  end
+
+  def users(room_id) do
+    Room
+    |> Repo.get!(room_id)
+    |> Repo.preload(:users)
   end
 end

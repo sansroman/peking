@@ -6,8 +6,13 @@ defmodule PekingWeb.Api.RoomView do
     %{data: render_many(rooms, RoomView, "room.json")}
   end
 
-  def render("show.json", %{room: room}) do
-    %{data: render_one(room, RoomView, "room.json")}
+  def render("show.json", %{room: room, has_collection: has_collection}) do
+    %{
+      data: %{
+        room: room,
+        has_collection: has_collection
+      }
+    }
   end
 
   def render("room.json", %{room: room}) do
@@ -17,6 +22,10 @@ defmodule PekingWeb.Api.RoomView do
       desc: room.desc,
       category: room.category,
       status: room.status,
-      hot: room.hot}
+      hot: room.hot,
+      online: room.online,
+      owner: room.user.nickname,
+      users: length(room.users)
+    }
   end
 end

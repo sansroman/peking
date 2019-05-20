@@ -4,6 +4,7 @@ defmodule Peking.Accounts.User do
   alias Peking.Accounts.Credential
   alias Peking.Rooms.Room
 
+  @derive {Jason.Encoder, only: [:id, :nickname, :introduction, :role, :inserted_at]}
   schema "users" do
     field :nickname, :string
     field :username, :string
@@ -13,6 +14,8 @@ defmodule Peking.Accounts.User do
 
     has_one :credential, Credential
     has_one :room, Room, on_replace: :update
+
+    many_to_many :rooms, Room, join_through: Peking.UserRoom, on_replace: :delete
 
     timestamps()
   end

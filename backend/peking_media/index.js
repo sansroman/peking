@@ -21,23 +21,18 @@ const nms = new NodeMediaServer(config)
 const client = redis.createClient();
 nms.run();
 
-nms.on('postPublish', (id, StreamPath, args) => {
-  let token = StreamPath.split('/')[2]
-
+nms.on('postPublish', (_, StreamPath, args) => {
+  let [, id, token] = StreamPath.split('/')
+  console.log("params", id, token);
   axios
-    .post(`http://${serverAddr}/api/verify`, {
+    .post(`http://${serverAddr}/api/rooms/live_cb`, {
       id,
       token
     }).then(res => {
-      client.hgetall(`room_${id}`, (err, obj) => {
-        if (!obj || !obj.status) client.HMSET(`room_${id}`, {
-          status: true,
-          online: obj.online
-        });
-      });
+      console.log(res)
 
     }).catch((err) => {
-      console.log(err);
+      // console.log(err);
     })
 
 
@@ -45,7 +40,7 @@ nms.on('postPublish', (id, StreamPath, args) => {
 
 nms.on('donePublish', (id, StreamPath, args) => {
   client.hgetall(`room_${id}`, (err, obj) => {
-    if (obj || obj.status) client.HMSET(`room_${id}`, {
+    if (obj !== null || obj.status) client.HMSET(`room_${id}`, {
       status: false,
       online: obj.online
     });

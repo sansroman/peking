@@ -30,7 +30,8 @@
             <el-input v-model="room.title" size="small"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button size="small" @click="startLive">提交</el-button>
+            <el-button size="small" @click="startLive">开始直播</el-button>
+            <el-button size="small" @click="stopLive">停止直播</el-button>
           </el-form-item>
         </el-form>
         Token: <el-input v-model="token" size="small" disabled></el-input>
@@ -44,7 +45,7 @@
           style="weight:100%"
         >
           <el-form-item label="讨论题目:" prop="title">
-            <el-input size="small" v-model="discuss.title" disabled></el-input>
+            <el-input size="small" v-model="discuss.title"></el-input>
           </el-form-item>
           <el-form-item label="讨论时间:" prop="time">
             <div class="block">
@@ -52,7 +53,7 @@
             </div>
           </el-form-item>
           <el-form-item>
-            <el-button size="small">开始</el-button>
+            <el-button size="small"  @click="startDiscuss">开始</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -66,10 +67,10 @@
           style="weight:100%"
         >
           <el-form-item label="测试题目:" prop="title">
-            <el-input size="small" v-model="quiz.title" disabled></el-input>
+            <el-input size="small" v-model="quiz.topic"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button size="small">开始</el-button>
+            <el-button size="small"  @click="startQuiz">开始</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -82,7 +83,7 @@
 import COS from 'cos-js-sdk-v5'
 import { SecretId, SecretKey } from '../../../secret.json'
 import { mapGetters } from 'vuex'
-import { startLive } from '@/api/room'
+import * as RoomApi from '@/api/room'
 
 export default {
   data () {
@@ -98,7 +99,7 @@ export default {
         title: ''
       },
       quiz: {
-        title: ''
+        topic: ''
       },
       userRules: {
         title: [
@@ -136,11 +137,39 @@ export default {
       })
     },
     startLive () {
-      startLive({ ...this.roomData }).then(({ data, status, error }) => {
-        if (status) this.token = data.data.token
-        else alert(error)
+      RoomApi.startLive({ ...this.roomData }).then(({ data, status, error }) => {
+        if (status) {
+          this.$message({
+            message: '获取Token成功',
+            type: 'success'
+          })
+          this.token = data.data.token
+        } else this.$message.error('获取token失败')
+      })
+    },
+    stopLive () {
+      RoomApi.stopLive().then(({ data, status, error }) => {
+        if (status) {
+          this.$message({
+            message: '关闭成功',
+            type: 'success'
+          })
+        } else this.$message.error('关闭失败，请稍后再试')
+      })
+    },
+    startDiscuss () {
+      RoomApi.startDiscuss({ ...this.discuss }).then(({ data, status, error }) => {
+        if (status) this.$message({ message: '开始讨论', type: 'success' })
+        else this.$message.error('开始失败')
+      })
+    },
+    startQuiz () {
+      RoomApi.startQuiz({ quiz: { ...this.quiz } }).then(({ data, status, error }) => {
+        if (status) this.$message({ message: '开始测验', type: 'success' })
+        else this.$message.error('开始失败')
       })
     }
+
   }
 }
 </script>

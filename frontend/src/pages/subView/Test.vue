@@ -14,32 +14,9 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="180px" align="center" label="提交时间">
-        <template slot-scope="scope">
-          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
-        </template>
-      </el-table-column>
-
       <el-table-column width="120px" align="center" label="老师">
         <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="100px" label="评分">
-        <template slot-scope="scope">
-          <svg-icon
-            v-for="n in +scope.row.importance"
-            :key="n"
-            icon-class="star"
-            class="meta-item__icon"
-          />
-        </template>
-      </el-table-column>
-
-      <el-table-column class-name="status-col" label="状态" width="110">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
+          <span>{{ scope.row.teacher }}</span>
         </template>
       </el-table-column>
 
@@ -51,52 +28,45 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="操作" width="120">
+      <el-table-column width="100px" label="评分">
         <template slot-scope="scope">
-          <router-link :to="'/test/edit/'+scope.row.id">
-            <el-button type="primary" size="small" icon="el-icon-edit">编辑</el-button>
-          </router-link>
+          <span>{{ scope.row.score }}</span>
         </template>
       </el-table-column>
+
+      <el-table-column class-name="status-col" label="状态" width="110">
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.score | statusFilter">{{ genStatus(scope.row.score) }}</el-tag>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="180px" align="center" label="提交时间">
+        <template slot-scope="scope">
+          <span>{{ scope.row.created_at | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </template>
+      </el-table-column>
+
     </el-table>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.limit"
-      @pagination="getList"
-    />
   </div>
 </template>
 
 <script>
-import { fetchList } from '@/api/article'
-import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import { fetchList } from '@/api/quiz'
 import { parseTime } from '@/utils'
 export default {
   name: 'Test',
-  components: { Pagination },
   filters: {
-    statusFilter (status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
+    statusFilter (score) {
+      if (!score) return 'info'
+      else return score > 60 ? 'success' : 'warning'
     },
     parseTime
   },
   data () {
     return {
       list: null,
-      total: 0,
-      listLoading: true,
-      listQuery: {
-        page: 1,
-        limit: 20
-      }
+      listLoading: true
     }
   },
   created () {
@@ -106,8 +76,7 @@ export default {
     getList () {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
+        this.list = response.data.data
         this.listLoading = false
       })
     },
@@ -118,6 +87,10 @@ export default {
     handleCurrentChange (val) {
       this.listQuery.page = val
       this.getList()
+    },
+    genStatus (score) {
+      if (!score) return '暂未审核'
+      else return score > 60 ? '通过测试' : '未通过测试'
     }
   }
 }

@@ -40,16 +40,12 @@
 <!-- 用户管理组件 -->
 <template>
   <div class="user-wrap">
-    <div class="search-place">
-      <el-input placeholder="请输入要搜索用户名或昵称" v-model="inputSearch" clearable></el-input>
-      <el-button class="searchBtn" @click="searchUser()">搜索</el-button>
-      <el-button type="success" @click="resetAll" class="searchBtn">重置</el-button>
-    </div>
     <el-table :data="tableData" id="out-table" v-loading="loading">
       <template v-for="column in tableColumns">
         <el-table-column
           :width="column.label == 'id' ? 80 : ''"
           align="center"
+          :formatter="column.formatter"
           :label="column.label"
           :prop="column.prop"
           :key="column.index"
@@ -57,22 +53,16 @@
       </template>
       <el-table-column label="操作" prop>
         <template slot-scope="scope">
-          <el-button @click="modifyUser(scope.row)" type="text" size="small">修改</el-button>
-          <el-button @click="deleteUser(scope.row)" type="text" size="small">删除</el-button>
+          <el-button @click="deleteRoom(scope.row)" type="text" size="small">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <div class="blockPage">
-      <el-pagination
-        layout="prev, pager, next"
-        @current-change="handleCurrentChange"
-        :total="count"
-      ></el-pagination>
-    </div>
   </div>
 </template>
 
 <script>
+import { getRoomList, deleteRoom as deleteRoomApi } from '@/api/room'
+
 export default {
   name: 'roomManager',
   data () {
@@ -84,51 +74,53 @@ export default {
           prop: 'id'
         },
         {
-          label: '用户名',
-          prop: 'username'
+          label: '姓名',
+          prop: 'owner'
         },
         {
-          label: '姓名',
-          prop: 'nickname'
+          label: '标题',
+          prop: 'title'
+        },
+        {
+          label: '类型',
+          prop: 'category'
         },
         {
           label: '状态',
           prop: 'status'
         },
         {
-          label: '创建时间',
-          prop: 'created_at'
+          label: '热门',
+          prop: 'hot'
         },
         {
           label: '关注人数',
-          prop: 'foucs_amount'
+          prop: 'users'
         },
         {
           label: '在线人数',
-          prop: 'online_amount'
+          prop: 'online'
         }
       ],
-      tableData: [{
-        id: 123,
-        username: 'sans',
-        nickname: '123',
-        status: '正在休息',
-        created_at: '2019-04-13',
-        focus_amount: 10,
-        online_amount: 1
-      }],
+      tableData: [],
       count: 1,
       loading: false
     }
   },
-  async created () {},
-  mounted () {},
+  mounted () {
+    getRoomList().then(res => (this.tableData = res.data.data))
+  },
   methods: {
-    searchUser () {},
-    resetAll () {},
-    modifyUser () {},
-    deleteUser () {},
-    handleCurrentChange () {}
+    deleteRoom ({ id }) {
+      deleteRoomApi(id).then(res => res.data.status || this.$message({ message: '删除成功', type: 'success' }))
+    },
+    cellValueRenderer (row, column, cellValue, index) {
+      let value = cellValue
+      if (typeof row[column.property] === 'boolean') {
+        value = String(cellValue)
+      }
+      return value
+    }
   }
 }
 </script>

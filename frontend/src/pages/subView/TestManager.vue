@@ -3,9 +3,7 @@
     <div class="filter-container">
       <el-input placeholder="标题" v-model="listQuery.title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
       <el-input placeholder="作者" v-model="listQuery. author" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter"/>
-
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
-
       <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">导出</el-button>
 
     </div>
@@ -18,17 +16,22 @@
       fit
       highlight-current-row
       style="width: 100%;"
-      @sort-change="sortChange">
-      <el-table-column label="序号" prop="id" sortable="custom" align="center" width="65">
+    >
+      <el-table-column label="测试题序号" prop="quiz_id" align="center" width="100px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.quiz_id }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="答案编号" prop="id" align="center" width="100px">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="标题" min-width="150px">
+      <el-table-column label="标题" min-width="100px">
         <template slot-scope="scope">
-          <span class="link-type" @click="handleUpdate(scope.row)">{{ scope.row.title }}</span>
-          <!-- <el-tag>{{ scope.row.type | typeFilter }}</el-tag> -->
+          <span class="link-type">{{ scope.row.title }}</span>
         </template>
       </el-table-column>
       <el-table-column label="作者" width="110px" align="center">
@@ -39,53 +42,39 @@
 
       <el-table-column label="评分" width="120px">
         <template slot-scope="scope">
-          <svg-icon v-for="n in +scope.row.importance" :key="n" icon-class="star" class="meta-item__icon"/>
+          <span>{{ scope.row.score }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="状态" class-name="status-col" width="130px">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
+          <el-tag :type="scope.row.score | statusFilter">{{ genStatus(scope.row.score) }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="260px" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="100px" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
-
         </template>
       </el-table-column>
     </el-table>
-
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="类型" prop="type">
-          <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
-          </el-select>
+        <el-form-item label="标题">
+          <el-input v-model="temp.title" disabled />
         </el-form-item>
-        <el-form-item label="日期" prop="timestamp">
-          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date"/>
+        <el-form-item label="答卷ID" hidden>
+          <el-input v-model="temp.id" disabled />
         </el-form-item>
-        <el-form-item label="标题" prop="title">
-          <el-input v-model="temp.title"/>
+        <el-form-item label="答卷">
+          <el-input v-model="temp.content" type="textarea" placeholder="Please input" disabled/>
         </el-form-item>
-        <el-form-item label="状态">
-          <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item"/>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="重要性">
-          <el-rate v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :max="3" style="margin-top:8px;"/>
-        </el-form-item>
-        <el-form-item label="点评">
-          <el-input :autosize="{ minRows: 2, maxRows: 4}" v-model="temp.remark" type="textarea" placeholder="Please input"/>
+        <el-form-item label="评分">
+          <el-input v-model="temp.score"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">确认</el-button>
+        <el-button type="primary" @click="updateData()">确认</el-button>
       </div>
     </el-dialog>
 
@@ -103,39 +92,17 @@
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
+import { fetchQuiz, fetchPv, updateAnswer } from '@/api/quiz'
 import waves from '@/directive/waves' // Waves directive
 import { parseTime } from '@/utils'
-import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-
-const calendarTypeOptions = [
-  { key: 'CN', display_name: 'China' },
-  { key: 'US', display_name: 'USA' },
-  { key: 'JP', display_name: 'Japan' },
-  { key: 'EU', display_name: 'Eurozone' }
-]
-
-// arr to obj ,such as { CN : "China", US : "USA" }
-const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-}, {})
 
 export default {
-  name: 'Task',
-  components: { Pagination },
+  name: 'TestManager',
   directives: { waves },
   filters: {
-    statusFilter (status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    },
-    typeFilter (type) {
-      return calendarTypeKeyValue[type]
+    statusFilter (score) {
+      if (!score) return 'info'
+      else return score > 60 ? 'success' : 'warning'
     },
     parseTime
   },
@@ -143,11 +110,8 @@ export default {
     return {
       tableKey: 0,
       list: null,
-      total: 0,
       listLoading: true,
       listQuery: {
-        page: 1,
-        limit: 20,
         importance: undefined,
         author: '',
         title: undefined,
@@ -155,7 +119,6 @@ export default {
         sort: '+id'
       },
       importanceOptions: [1, 2, 3],
-      calendarTypeOptions,
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
@@ -190,14 +153,13 @@ export default {
   methods: {
     getList () {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
+      fetchQuiz(this.listQuery).then(response => {
+        this.list = response.data.data
 
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1.5 * 1000)
+        }, 1 * 1000)
       })
     },
     handleFilter () {
@@ -212,55 +174,11 @@ export default {
       // eslint-disable-next-line
       row.status = status
     },
-    sortChange (data) {
-      const { prop, order } = data
-      if (prop === 'id') {
-        this.sortByID(order)
-      }
-    },
-    sortByID (order) {
-      if (order === 'ascending') {
-        this.listQuery.sort = '+id'
-      } else {
-        this.listQuery.sort = '-id'
-      }
-      this.handleFilter()
-    },
-    resetTemp () {
-      this.temp = {
-        id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        status: 'published',
-        type: ''
-      }
-    },
     handleCreate () {
-      this.resetTemp()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
-      })
-    },
-    createData () {
-      this.$refs['dataForm'].validate(valid => {
-        if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          createArticle(this.temp).then(() => {
-            this.list.unshift(this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
       })
     },
     handleUpdate (row) {
@@ -275,23 +193,16 @@ export default {
     updateData () {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateArticle(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
-            }
+          const { id, score } = this.temp
+          updateAnswer({ answer: { id, score } }).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
-              message: '更新成功',
+              message: '评阅成功',
               type: 'success',
               duration: 2000
             })
+            this.getList()
           })
         }
       })
@@ -334,6 +245,10 @@ export default {
           return v[j]
         }
       }))
+    },
+    genStatus (score) {
+      if (!score) return '暂未审核'
+      else return score > 60 ? '通过测试' : '未通过测试'
     }
   }
 }
