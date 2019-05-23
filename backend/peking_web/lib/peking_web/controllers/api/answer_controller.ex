@@ -17,8 +17,7 @@ defmodule PekingWeb.Api.AnswerController do
          {:ok, %Answer{} = answer} <- Quizs.create_answer(conn.assigns.current_user, quiz, answer_params)
     do
       conn
-      |> put_status(:created)
-      |> render("show.json", answer: answer)
+      |> json(%{status: true, error: ""})
     else
       _ ->
         json(conn, %{status: false, error: "Creation failed"})

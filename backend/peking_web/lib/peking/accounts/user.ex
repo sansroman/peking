@@ -2,6 +2,7 @@ defmodule Peking.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
   alias Peking.Accounts.Credential
+  alias Peking.Accounts.TODO
   alias Peking.Rooms.Room
 
   @derive {Jason.Encoder, only: [:id, :nickname, :introduction, :role, :inserted_at]}
@@ -14,7 +15,7 @@ defmodule Peking.Accounts.User do
 
     has_one :credential, Credential
     has_one :room, Room, on_replace: :update
-
+    has_many :todos, TODO
     many_to_many :rooms, Room, join_through: Peking.UserRoom, on_replace: :delete
 
     timestamps()

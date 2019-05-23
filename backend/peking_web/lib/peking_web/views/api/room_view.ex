@@ -24,8 +24,14 @@ defmodule PekingWeb.Api.RoomView do
       status: room.status,
       hot: room.hot,
       online: room.online,
-      owner: room.user.nickname,
-      users: length(room.users)
+      owner: case room.user do
+              %Ecto.Association.NotLoaded{} -> %{}
+              user -> user.nickname
+             end,
+      users: case room.users do
+                %Ecto.Association.NotLoaded{} -> 0
+                users -> length(room.users)
+             end
     }
   end
 end

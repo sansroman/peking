@@ -20,7 +20,7 @@ defmodule Peking.Accounts do
   def list_users do
     User
     |> Repo.all()
-    |> Repo.preload([:room, :rooms, :credential])
+    |> Repo.preload([:room, :rooms, :credential, :todos])
   end
 
   @doc """
@@ -40,7 +40,7 @@ defmodule Peking.Accounts do
   def get_user!(id) do
     User
     |> Repo.get!(id)
-    |> Repo.preload([:room, :rooms, :credential])
+    |> Repo.preload([:room, :rooms, :credential, :todos])
   end
 
   @doc """
@@ -220,5 +220,102 @@ defmodule Peking.Accounts do
         Comeonin.Bcrypt.dummy_checkpw()
         {:error, :not_found}
     end
+  end
+
+  alias Peking.Accounts.TODO
+
+  @doc """
+  Returns the list of todos.
+
+  ## Examples
+
+      iex> list_todos()
+      [%TODO{}, ...]
+
+  """
+  def list_todos do
+    Repo.all(TODO)
+  end
+
+  @doc """
+  Gets a single todo.
+
+  Raises `Ecto.NoResultsError` if the Todo does not exist.
+
+  ## Examples
+
+      iex> get_todo!(123)
+      %TODO{}
+
+      iex> get_todo!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_todo!(id), do: Repo.get!(TODO, id)
+
+  @doc """
+  Creates a todo.
+
+  ## Examples
+
+      iex> create_todo(%{field: value})
+      {:ok, %TODO{}}
+
+      iex> create_todo(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_todo(%User{} = user, attrs) do
+    %TODO{}
+    |> TODO.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a todo.
+
+  ## Examples
+
+      iex> update_todo(todo, %{field: new_value})
+      {:ok, %TODO{}}
+
+      iex> update_todo(todo, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_todo(%TODO{} = todo, attrs) do
+    todo
+    |> TODO.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a TODO.
+
+  ## Examples
+
+      iex> delete_todo(todo)
+      {:ok, %TODO{}}
+
+      iex> delete_todo(todo)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_todo(%TODO{} = todo) do
+    Repo.delete(todo)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking todo changes.
+
+  ## Examples
+
+      iex> change_todo(todo)
+      %Ecto.Changeset{source: %TODO{}}
+
+  """
+  def change_todo(%TODO{} = todo) do
+    TODO.changeset(todo, %{})
   end
 end

@@ -187,4 +187,65 @@ defmodule Peking.AccountsTest do
       assert %Ecto.Changeset{} = Accounts.change_user(user)
     end
   end
+
+  describe "todos" do
+    alias Peking.Accounts.TODO
+
+    @valid_attrs %{content: "some content", status: 42}
+    @update_attrs %{content: "some updated content", status: 43}
+    @invalid_attrs %{content: nil, status: nil}
+
+    def todo_fixture(attrs \\ %{}) do
+      {:ok, todo} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Accounts.create_todo()
+
+      todo
+    end
+
+    test "list_todos/0 returns all todos" do
+      todo = todo_fixture()
+      assert Accounts.list_todos() == [todo]
+    end
+
+    test "get_todo!/1 returns the todo with given id" do
+      todo = todo_fixture()
+      assert Accounts.get_todo!(todo.id) == todo
+    end
+
+    test "create_todo/1 with valid data creates a todo" do
+      assert {:ok, %TODO{} = todo} = Accounts.create_todo(@valid_attrs)
+      assert todo.content == "some content"
+      assert todo.status == 42
+    end
+
+    test "create_todo/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_todo(@invalid_attrs)
+    end
+
+    test "update_todo/2 with valid data updates the todo" do
+      todo = todo_fixture()
+      assert {:ok, %TODO{} = todo} = Accounts.update_todo(todo, @update_attrs)
+      assert todo.content == "some updated content"
+      assert todo.status == 43
+    end
+
+    test "update_todo/2 with invalid data returns error changeset" do
+      todo = todo_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_todo(todo, @invalid_attrs)
+      assert todo == Accounts.get_todo!(todo.id)
+    end
+
+    test "delete_todo/1 deletes the todo" do
+      todo = todo_fixture()
+      assert {:ok, %TODO{}} = Accounts.delete_todo(todo)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_todo!(todo.id) end
+    end
+
+    test "change_todo/1 returns a todo changeset" do
+      todo = todo_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_todo(todo)
+    end
+  end
 end

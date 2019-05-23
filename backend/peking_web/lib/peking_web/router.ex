@@ -7,7 +7,6 @@ defmodule PekingWeb.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug PekingWeb.Auth
   end
 
   pipeline :api do
@@ -16,15 +15,13 @@ defmodule PekingWeb.Router do
     plug PekingWeb.Auth
   end
 
-  scope "/", PekingWeb do
-    pipe_through :browser
 
-    get "/", PageController, :index
-    resources "/sessions", SessionController
-    resources "/users", UserController
-    resources "/rooms", RoomController
-    resources "/quizs", QuizController
-    resources "/answers", AnswerController
+  pipeline :static do
+    plug Plug.Static,
+    at: "/static",
+    from: :peking,
+    gzip: false,
+    only: ~w(css fonts images js favicon.ico robots.txt)
   end
 
   scope "/api", PekingWeb.Api do
@@ -47,8 +44,15 @@ defmodule PekingWeb.Router do
     get "/answers/me", AnswerController, :me
     get "/answers/own", AnswerController, :own
     resources "/answers", AnswerController
+    resources "/todos", TODOController
   end
 
+
+  scope "/", PekingWeb do
+    pipe_through [:static, :browser]
+
+    get "/*path", PageController, :index
+  end
   # Other scopes may use custom stacks.
   # scope "/api", PekingWeb do
   #   pipe_through :api

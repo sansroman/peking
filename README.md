@@ -40,6 +40,8 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
   - 查看学生
 管理端
   - 管理直播间
+所有
+  - 待办事项
 
 ### Router:
 - [x] Authenticate

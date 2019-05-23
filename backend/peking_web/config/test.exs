@@ -12,7 +12,7 @@ config :logger, level: :warn
 # Configure your database
 config :peking, Peking.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "peking",
   database: "peking_test",
-  hostname: "localhost",
+  hostname: System.get_env("PGHOST"),
   pool: Ecto.Adapters.SQL.Sandbox

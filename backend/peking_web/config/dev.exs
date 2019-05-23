@@ -10,16 +10,7 @@ config :peking, PekingWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
-  check_origin: false,
-  watchers: [
-    node: [
-      "node_modules/webpack/bin/webpack.js",
-      "--mode",
-      "development",
-      "--watch-stdin",
-      cd: Path.expand("../assets", __DIR__)
-    ]
-  ]
+  check_origin: false
 
 # ## SSL Support
 #
@@ -68,8 +59,8 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Configure your database
 config :peking, Peking.Repo,
-  username: "tboevil",
-  password: "",
+  username: "postgres",
+  password: "peking",
   database: "peking_dev",
-  hostname: "localhost",
+  hostname: System.get_env("PGHOST"),
   pool_size: 10

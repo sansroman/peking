@@ -22,6 +22,7 @@ defmodule PekingWeb.Api.UserView do
       rooms: user.rooms,
       room: user.room,
       created_at: user.inserted_at,
+      todos: user.todos
     }
   end
 end

@@ -152,7 +152,7 @@ defmodule Peking.Rooms do
   def my_collect(user_id) do
     User
     |> Repo.get(user_id)
-    |> Repo.preload(:rooms)
+    |> Repo.preload([:rooms])
   end
 
   def incoming(room_id) do

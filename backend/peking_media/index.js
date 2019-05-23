@@ -1,7 +1,6 @@
 const NodeMediaServer = require('node-media-server')
 const axios = require('axios')
-const redis = require('redis')
-const serverAddr = 'localhost:4000'
+const serverAddr = process.env.MEDIA_SERVER || 'localhost:4000'
 let streamArr = [];
 const config = {
   rtmp: {
@@ -18,31 +17,26 @@ const config = {
 };
 
 const nms = new NodeMediaServer(config)
-const client = redis.createClient();
 nms.run();
 
-nms.on('postPublish', (_, StreamPath, args) => {
-  let [, id, token] = StreamPath.split('/')
-  console.log("params", id, token);
+nms.on('postPublish', (id, StreamPath, args) => {
+  const room_id = StreamPath.replace(/\//g, '')
+  const { token } = args
+  console.log("lll",StreamPath, room_id, token);
   axios
     .post(`http://${serverAddr}/api/rooms/live_cb`, {
-      id,
+      id: room_id,
       token
     }).then(res => {
-      console.log(res)
-
     }).catch((err) => {
-      // console.log(err);
+      console.log(err);
+      let session = nms.getSession(id);
+      session.reject();
     })
 
 
 });
 
 nms.on('donePublish', (id, StreamPath, args) => {
-  client.hgetall(`room_${id}`, (err, obj) => {
-    if (obj !== null || obj.status) client.HMSET(`room_${id}`, {
-      status: false,
-      online: obj.online
-    });
-  })
+  console.log(id);
 });
