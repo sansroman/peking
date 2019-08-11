@@ -164,7 +164,7 @@ export default {
       })
     },
     joinChannel () {
-      let socket = new Socket('ws://app:4000/socket')
+      let socket = new Socket('wss://peking.tboevil.top/socket')
       socket.connect()
       this.channel = socket.channel(`room:${this.$route.params.id}`, {})
       this.channel
@@ -180,13 +180,11 @@ export default {
         const videoElement = document.getElementById('videoElement')
         const flvPlayer = flvjs.createPlayer({
           type: 'flv',
-          url: `http://app:9090/${this.$route.params.id}/.flv`
+          url: `https://peking.tboevil.top:9443/${this.$route.params.id}/.flv`
         })
         flvPlayer.attachMediaElement(videoElement)
-        if (this.live.state) {
-          flvPlayer.load()
-          flvPlayer.play()
-        }
+        flvPlayer.load()
+        flvPlayer.play()
       }
     },
     handleMsg (resp) {

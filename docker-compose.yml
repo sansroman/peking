@@ -21,8 +21,15 @@ services:
     build: ./backend/peking_media
     ports:
       - "1935:1935"
+      - "9090:9090"
+      - "9443:9443"
+    volumes:
+      - ./ssl:/etc/ssl/
+    environment:
+      MEDIA_SERVER: app:4000
   nginx:
     image: nginx:latest
+    restart: always
     container_name: production_peking_nginx
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf

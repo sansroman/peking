@@ -13,6 +13,12 @@ const config = {
   http: {
     port: 9090,
     allow_origin: '*'
+  },
+  https: {
+    port: 9443,
+    allow_origin: '*',
+    key: '/etc/ssl/peking.tboevil.top.key',
+    cert: '/etc/ssl/peking.tboevil.top.pem',
   }
 };
 
